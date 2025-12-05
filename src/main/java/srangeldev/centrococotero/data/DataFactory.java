@@ -128,359 +128,446 @@ public class DataFactory {
     }
 
     public static List<Producto> createTestProducts(Map<TipoCategoria, Categoria> categorias) {
-        // Mapeo de categorías del ejemplo a las nuestras
-        Categoria electronica = categorias.get(TipoCategoria.ELECTRONICA);
+        // Mapeo de categorías tropicales
+        Categoria alimentos = categorias.get(TipoCategoria.ALIMENTOS_TROPICALES);
+        Categoria bebidas = categorias.get(TipoCategoria.BEBIDAS);
+        Categoria cosmetica = categorias.get(TipoCategoria.COSMETICA_NATURAL);
+        Categoria aceites = categorias.get(TipoCategoria.ACEITES_DERIVADOS);
+        Categoria accesorios = categorias.get(TipoCategoria.ACCESORIOS_PLAYA);
+        Categoria decoracion = categorias.get(TipoCategoria.DECORACION_TROPICAL);
+        Categoria textil = categorias.get(TipoCategoria.TEXTIL_VERANO);
+        Categoria bienestar = categorias.get(TipoCategoria.BIENESTAR);
+        Categoria artesania = categorias.get(TipoCategoria.ARTESANIA);
         Categoria otros = categorias.get(TipoCategoria.OTROS);
         
-        // Si no existen, usamos una por defecto (esto asume que el mapa viene poblado)
-        if (electronica == null) electronica = Categoria.builder().tipo(TipoCategoria.ELECTRONICA).build();
+        // Si no existen, usamos una por defecto
+        if (alimentos == null) alimentos = Categoria.builder().tipo(TipoCategoria.ALIMENTOS_TROPICALES).build();
+        if (bebidas == null) bebidas = Categoria.builder().tipo(TipoCategoria.BEBIDAS).build();
+        if (cosmetica == null) cosmetica = Categoria.builder().tipo(TipoCategoria.COSMETICA_NATURAL).build();
+        if (aceites == null) aceites = Categoria.builder().tipo(TipoCategoria.ACEITES_DERIVADOS).build();
+        if (accesorios == null) accesorios = Categoria.builder().tipo(TipoCategoria.ACCESORIOS_PLAYA).build();
+        if (decoracion == null) decoracion = Categoria.builder().tipo(TipoCategoria.DECORACION_TROPICAL).build();
+        if (textil == null) textil = Categoria.builder().tipo(TipoCategoria.TEXTIL_VERANO).build();
+        if (bienestar == null) bienestar = Categoria.builder().tipo(TipoCategoria.BIENESTAR).build();
+        if (artesania == null) artesania = Categoria.builder().tipo(TipoCategoria.ARTESANIA).build();
         if (otros == null) otros = Categoria.builder().tipo(TipoCategoria.OTROS).build();
 
         return Arrays.asList(
-                // SMARTPHONES -> ELECTRONICA
+                // ACEITES Y DERIVADOS DE COCO
                 Producto.builder()
-                        .nombre("iPhone 17 Pro Max")
-                        .precio(new BigDecimal("1199.00"))
-                        .imagenes(List.of("https://medias.lapostemobile.fr/fiche_mobile/layer/9724_Layer_2.png"))
-                        .descripcion("El iPhone más avanzado de Apple con chip A17 Pro, titanio aeroespacial y cámara de 48MP. Estado impecable, apenas usado.")
-                        .categoria(electronica)
-                        .stock(10)
+                        .nombre("Aceite de Coco Virgen Orgánico 500ml")
+                        .precio(new BigDecimal("12.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1474623809196-26c1d33457cc?w=400",
+                            "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400",
+                            "https://images.unsplash.com/photo-1598662957477-64b2e86d9421?w=400"))
+                        .descripcion("Aceite de coco 100% virgen prensado en frío. Ideal para cocinar, cuidado de la piel y cabello. Certificado orgánico.")
+                        .categoria(aceites)
+                        .stock(50)
                         .build(),
                 Producto.builder()
-                        .nombre("Samsung Galaxy S24 Ultra")
-                        .precio(new BigDecimal("1099.00"))
-                        .imagenes(List.of("https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202404/11/00157063608129009_22__1200x1200.jpg"))
-                        .descripcion("Flagship de Samsung con S Pen integrado, pantalla Dynamic AMOLED 2X y cámara de 200MP. Como nuevo, con todos los accesorios.")
-                        .categoria(electronica)
-                        .stock(5)
+                        .nombre("Aceite de Coco Extra Virgen 1L")
+                        .precio(new BigDecimal("19.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400",
+                            "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=400",
+                            "https://images.unsplash.com/photo-1556228994-1a6c8c846819?w=400"))
+                        .descripcion("Aceite de coco prensado en frío de primera calidad. Perfecto para cocina gourmet y tratamientos capilares.")
+                        .categoria(aceites)
+                        .stock(40)
                         .build(),
                 Producto.builder()
-                        .nombre("Google Pixel 8 Pro")
-                        .precio(new BigDecimal("899.00"))
-                        .imagenes(List.of("https://http2.mlstatic.com/D_NQ_NP_802433-MLU78081005713_072024-O.webp"))
-                        .descripcion("El mejor teléfono para fotografía con IA de Google Tensor G3. Pantalla LTPO de 120Hz. Excelente estado de conservación.")
-                        .categoria(electronica)
-                        .stock(8)
+                        .nombre("Manteca de Coco Orgánica 300g")
+                        .precio(new BigDecimal("8.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1576426863848-c21f53c60b19?w=400",
+                            "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400",
+                            "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400"))
+                        .descripcion("Manteca de coco pura para repostería y cuidado corporal. Textura cremosa y aroma natural.")
+                        .categoria(aceites)
+                        .stock(60)
                         .build(),
                 Producto.builder()
-                        .nombre("iPhone 15 Pro")
-                        .precio(new BigDecimal("999.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400"))
-                        .descripcion("iPhone 15 Pro con titanio natural, cámara principal de 48MP y zoom óptico 3x. Perfecto estado, sin rayones.")
-                        .categoria(electronica)
-                        .stock(12)
+                        .nombre("Leche de Coco Premium 400ml")
+                        .precio(new BigDecimal("3.49"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400",
+                            "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400",
+                            "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400"))
+                        .descripcion("Leche de coco cremosa sin aditivos. Ideal para curries, batidos y postres tropicales.")
+                        .categoria(alimentos)
+                        .stock(100)
                         .build(),
                 Producto.builder()
-                        .nombre("OnePlus 12")
-                        .precio(new BigDecimal("749.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"))
-                        .descripcion("Flagship killer con Snapdragon 8 Gen 3, carga rápida 100W y pantalla AMOLED 120Hz. Como recién salido de caja.")
-                        .categoria(electronica)
-                        .stock(7)
+                        .nombre("Coco Rallado Natural 250g")
+                        .precio(new BigDecimal("4.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1589520465925-6c0feee87bf4?w=400",
+                            "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400",
+                            "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400"))
+                        .descripcion("Coco rallado sin azúcar añadido. Perfecto para repostería, smoothies y decoración de postres.")
+                        .categoria(alimentos)
+                        .stock(80)
                         .build(),
                 Producto.builder()
-                        .nombre("Xiaomi 14 Ultra")
-                        .precio(new BigDecimal("899.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400"))
-                        .descripcion("Cámara Leica profesional, Snapdragon 8 Gen 3 y diseño premium. Ideal para fotografía móvil avanzada.")
-                        .categoria(electronica)
-                        .stock(4)
+                        .nombre("Harina de Coco Sin Gluten 500g")
+                        .precio(new BigDecimal("6.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1571064119049-8bedf4ec1da1?w=400",
+                            "https://images.unsplash.com/photo-1628289000530-89f7bf662313?w=400",
+                            "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400"))
+                        .descripcion("Harina de coco 100% natural, alta en fibra y proteína. Alternativa saludable para repostería sin gluten.")
+                        .categoria(alimentos)
+                        .stock(45)
                         .build(),
                 Producto.builder()
-                        .nombre("iPhone 14")
-                        .precio(new BigDecimal("699.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=400"))
-                        .descripcion("iPhone 14 en azul, 128GB. Batería excelente, pantalla perfecta. Incluye cargador y funda original.")
-                        .categoria(electronica)
-                        .stock(15)
+                        .nombre("Azúcar de Coco Orgánico 400g")
+                        .precio(new BigDecimal("7.49"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1514517521153-1be72277b32f?w=400",
+                            "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400",
+                            "https://images.unsplash.com/photo-1556228852-80f66bb1ba6b?w=400"))
+                        .descripcion("Azúcar de coco con bajo índice glucémico. Endulzante natural rico en minerales para café y repostería.")
+                        .categoria(alimentos)
+                        .stock(55)
                         .build(),
                 Producto.builder()
-                        .nombre("Nothing Phone 2")
-                        .precio(new BigDecimal("599.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400"))
-                        .descripcion("Diseño transparente único con Glyph Interface. Android puro y rendimiento excepcional.")
-                        .categoria(electronica)
-                        .stock(6)
+                        .nombre("Chips de Coco Tostado 150g")
+                        .precio(new BigDecimal("5.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400",
+                            "https://images.unsplash.com/photo-1589520465925-6c0feee87bf4?w=400",
+                            "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400"))
+                        .descripcion("Snack crujiente de coco natural tostado. Perfecto para picar entre horas o añadir a yogures.")
+                        .categoria(alimentos)
+                        .stock(70)
                         .build(),
                 Producto.builder()
-                        .nombre("Samsung Galaxy Z Flip 5")
-                        .precio(new BigDecimal("999.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1567721913486-6585f069b332?w=400"))
-                        .descripcion("Plegable compacto con pantalla externa mejorada. Perfecto para quienes buscan innovación.")
-                        .categoria(electronica)
-                        .stock(3)
+                        .nombre("Agua de Coco Natural 330ml")
+                        .precio(new BigDecimal("2.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1556881286-fc6915169721?w=400",
+                            "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400",
+                            "https://images.unsplash.com/photo-1608181689009-d0d3e4ab0de2?w=400"))
+                        .descripcion("Agua de coco 100% pura, sin azúcares añadidos. Hidratación natural y refrescante.")
+                        .categoria(bebidas)
+                        .stock(120)
                         .build(),
                 Producto.builder()
-                        .nombre("Google Pixel 7a")
-                        .precio(new BigDecimal("449.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400"))
-                        .descripcion("El mejor Pixel en relación calidad-precio. Cámara excepcional y Android puro garantizado.")
-                        .categoria(electronica)
-                        .stock(20)
-                        .build(),
-
-                // LAPTOPS -> ELECTRONICA
-                Producto.builder()
-                        .nombre("MacBook Pro M3")
-                        .precio(new BigDecimal("1999.00"))
-                        .imagenes(List.of("https://www.notebookcheck.org/fileadmin/Notebooks/Apple/MacBook_Pro_14_2023_M3_Max/IMG_1008.JPG"))
-                        .descripcion("MacBook Pro 14 con chip M3 Max, 36GB RAM, 1TB SSD. Perfecto para profesionales creativos. Garantía Apple vigente.")
-                        .categoria(electronica)
-                        .stock(5)
-                        .build(),
-                Producto.builder()
-                        .nombre("MacBook Air M2")
-                        .precio(new BigDecimal("1299.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400"))
-                        .descripcion("MacBook Air M2 de 13 pulgadas, 16GB RAM, 512GB SSD. Ultra portátil y silencioso. Perfecto para estudiantes.")
-                        .categoria(electronica)
-                        .stock(10)
-                        .build(),
-                Producto.builder()
-                        .nombre("Dell XPS 13")
-                        .precio(new BigDecimal("1149.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400"))
-                        .descripcion("Ultrabook premium con Intel i7, 16GB RAM, pantalla 4K táctil. Ideal para productividad y diseño.")
-                        .categoria(electronica)
-                        .stock(7)
-                        .build(),
-                Producto.builder()
-                        .nombre("ASUS ROG Strix")
-                        .precio(new BigDecimal("1799.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400"))
-                        .descripcion("Laptop gaming con RTX 4070, Intel i7-13700H, 32GB RAM. Perfecto para gaming y streaming profesional.")
-                        .categoria(electronica)
-                        .stock(4)
-                        .build(),
-                Producto.builder()
-                        .nombre("ThinkPad X1 Carbon")
-                        .precio(new BigDecimal("1599.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400"))
-                        .descripcion("Laptop empresarial premium, ultra liviano, teclado excepcional. Ideal para profesionales y ejecutivos.")
-                        .categoria(electronica)
-                        .stock(6)
-                        .build(),
-                Producto.builder()
-                        .nombre("HP Spectre x360")
-                        .precio(new BigDecimal("1249.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=400"))
-                        .descripcion("Convertible 2-en-1 con pantalla táctil OLED, Intel i7 y diseño premium. Versatilidad máxima.")
-                        .categoria(electronica)
-                        .stock(8)
-                        .build(),
-                Producto.builder()
-                        .nombre("Surface Laptop 5")
-                        .precio(new BigDecimal("1399.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400"))
-                        .descripcion("Microsoft Surface con procesador Intel de 12ª gen, pantalla PixelSense táctil. Elegancia y rendimiento.")
-                        .categoria(electronica)
-                        .stock(5)
-                        .build(),
-                Producto.builder()
-                        .nombre("Framework Laptop")
-                        .precio(new BigDecimal("999.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=400"))
-                        .descripcion("Laptop modular y reparable, diseño sostenible. Perfecto para desarrolladores conscientes.")
-                        .categoria(electronica)
-                        .stock(3)
+                        .nombre("Agua de Coco con Piña 1L")
+                        .precio(new BigDecimal("4.49"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400",
+                            "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=400",
+                            "https://images.unsplash.com/photo-1546173159-315724a31696?w=400"))
+                        .descripcion("Deliciosa mezcla de agua de coco con zumo de piña tropical. Refrescante y energizante.")
+                        .categoria(bebidas)
+                        .stock(90)
                         .build(),
 
-                // AUDIO -> ELECTRONICA
+                // COSMÉTICA NATURAL
                 Producto.builder()
-                        .nombre("AirPods Pro 2ª Gen")
-                        .precio(new BigDecimal("249.00"))
-                        .imagenes(List.of("https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111851_sp880-airpods-Pro-2nd-gen.png"))
-                        .descripcion("Auriculares con cancelación de ruido adaptativa y audio espacial personalizado. Nuevos en caja sellada.")
-                        .categoria(electronica)
-                        .stock(20)
+                        .nombre("Jabón Artesanal de Coco 100g")
+                        .precio(new BigDecimal("5.49"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1585933646398-43a092936b34?w=400",
+                            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400",
+                            "https://images.unsplash.com/photo-1600857062241-98e5de7f9144?w=400"))
+                        .descripcion("Jabón natural hecho a mano con aceite de coco virgen. Hidratante y suave para todo tipo de pieles.")
+                        .categoria(cosmetica)
+                        .stock(85)
                         .build(),
                 Producto.builder()
-                        .nombre("Sony WH-1000XM5")
-                        .precio(new BigDecimal("299.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400"))
-                        .descripcion("Auriculares noise-cancelling líderes del mercado. Sonido excepcional y comodidad todo el día.")
-                        .categoria(electronica)
-                        .stock(15)
+                        .nombre("Crema Hidratante Coco & Mango 200ml")
+                        .precio(new BigDecimal("12.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400",
+                            "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400",
+                            "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400"))
+                        .descripcion("Crema corporal hidratante con extracto de coco y mango. Absorción rápida, piel suave y aromática.")
+                        .categoria(cosmetica)
+                        .stock(60)
                         .build(),
                 Producto.builder()
-                        .nombre("Bose QuietComfort")
-                        .precio(new BigDecimal("249.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1545127398-14699f92334b?w=400"))
-                        .descripcion("Cancelación de ruido premium de Bose. Perfectos para viajes largos y trabajo concentrado.")
-                        .categoria(electronica)
-                        .stock(12)
+                        .nombre("Protector Solar Natural SPF 50")
+                        .precio(new BigDecimal("16.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400",
+                            "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400",
+                            "https://images.unsplash.com/photo-1605289982774-9a6fef564df8?w=400"))
+                        .descripcion("Protector solar con aceite de coco y filtros naturales. Resistente al agua, no deja residuo blanco.")
+                        .categoria(cosmetica)
+                        .stock(75)
                         .build(),
                 Producto.builder()
-                        .nombre("Marshall Acton III")
-                        .precio(new BigDecimal("199.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400"))
-                        .descripcion("Altavoz Bluetooth vintage con sonido Marshall icónico. Perfecto para ambientar cualquier espacio.")
-                        .categoria(electronica)
-                        .stock(8)
+                        .nombre("Bálsamo Labial Coco & Vainilla")
+                        .precio(new BigDecimal("3.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400",
+                            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400",
+                            "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=400"))
+                        .descripcion("Bálsamo labial natural con aceite de coco y esencia de vainilla. Hidratación duradera.")
+                        .categoria(cosmetica)
+                        .stock(100)
                         .build(),
                 Producto.builder()
-                        .nombre("JBL Flip 6")
-                        .precio(new BigDecimal("89.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400"))
-                        .descripcion("Altavoz portátil resistente al agua, sonido potente y batería de 12 horas. Ideal para exteriores.")
-                        .categoria(electronica)
-                        .stock(25)
+                        .nombre("Exfoliante Corporal Coco & Café")
+                        .precio(new BigDecimal("14.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400",
+                            "https://images.unsplash.com/photo-1629198726657-8c04e885ff56?w=400",
+                            "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?w=400"))
+                        .descripcion("Exfoliante natural con coco rallado y café molido. Elimina células muertas y suaviza la piel.")
+                        .categoria(cosmetica)
+                        .stock(55)
                         .build(),
                 Producto.builder()
-                        .nombre("Sennheiser HD 660S")
-                        .precio(new BigDecimal("399.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400"))
-                        .descripcion("Auriculares audiófilo de referencia con drivers dinámicos mejorados. Para los más exigentes.")
-                        .categoria(electronica)
-                        .stock(4)
-                        .build(),
-                Producto.builder()
-                        .nombre("Jabra Elite 85h")
-                        .precio(new BigDecimal("179.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"))
-                        .descripcion("Auriculares wireless con cancelación de ruido inteligente y 36h de batería. Perfecto para oficina.")
-                        .categoria(electronica)
-                        .stock(10)
-                        .build(),
-                Producto.builder()
-                        .nombre("Audio-Technica ATH-M50x")
-                        .precio(new BigDecimal("149.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=400"))
-                        .descripcion("Auriculares de estudio profesional con sonido neutro y construcción robusta. Clásico atemporal.")
-                        .categoria(electronica)
-                        .stock(15)
-                        .build(),
-
-                // GAMING -> ELECTRONICA
-                Producto.builder()
-                        .nombre("Steam Deck OLED")
-                        .precio(new BigDecimal("549.00"))
-                        .imagenes(List.of("https://i.blogs.es/420d82/steam-deck-oled-portada/1366_521.jpeg"))
-                        .descripcion("Consola portátil con pantalla OLED HDR de 7.4 pulgadas. Modelo de 512GB. Gaming en cualquier lugar. Como nuevo.")
-                        .categoria(electronica)
-                        .stock(10)
-                        .build(),
-                Producto.builder()
-                        .nombre("PlayStation 5")
-                        .precio(new BigDecimal("499.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400"))
-                        .descripcion("PS5 en perfecto estado con un mando adicional. Incluye 3 juegos digitales. Como nueva.")
-                        .categoria(electronica)
-                        .stock(8)
-                        .build(),
-                Producto.builder()
-                        .nombre("Xbox Series X")
-                        .precio(new BigDecimal("459.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=400"))
-                        .descripcion("Consola next-gen con 1TB, Game Pass incluido por 3 meses. Potencia 4K para gaming hardcore.")
-                        .categoria(electronica)
-                        .stock(6)
-                        .build(),
-                Producto.builder()
-                        .nombre("Nintendo Switch OLED")
-                        .precio(new BigDecimal("329.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400"))
-                        .descripcion("Switch OLED con pantalla mejorada, incluye Pro Controller y 5 juegos físicos. Diversión garantizada.")
-                        .categoria(electronica)
-                        .stock(12)
-                        .build(),
-                Producto.builder()
-                        .nombre("Logitech G Pro X")
-                        .precio(new BigDecimal("159.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400"))
-                        .descripcion("Auriculares gaming profesionales con micrófono Blue VO!CE. Usados en esports profesional.")
-                        .categoria(electronica)
-                        .stock(15)
-                        .build(),
-                Producto.builder()
-                        .nombre("Razer DeathAdder V3")
-                        .precio(new BigDecimal("69.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400"))
-                        .descripcion("Ratón gaming ergonómico con sensor Focus Pro 30K. Precisión profesional para competir.")
-                        .categoria(electronica)
-                        .stock(20)
-                        .build(),
-                Producto.builder()
-                        .nombre("ROG Ally")
-                        .precio(new BigDecimal("699.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400"))
-                        .descripcion("Handheld PC gaming con Windows 11, juega tu biblioteca Steam en cualquier lugar.")
-                        .categoria(electronica)
-                        .stock(5)
-                        .build(),
-                Producto.builder()
-                        .nombre("Valve Index VR")
-                        .precio(new BigDecimal("999.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=400"))
-                        .descripcion("Sistema VR premium con tracking de dedos y audio off-ear. La mejor experiencia de realidad virtual.")
-                        .categoria(electronica)
-                        .stock(3)
+                        .nombre("Mascarilla Capilar Coco Intensivo")
+                        .precio(new BigDecimal("11.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400",
+                            "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400",
+                            "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400"))
+                        .descripcion("Tratamiento reparador para cabello dañado con aceite de coco virgen. Brillo y suavidad extremos.")
+                        .categoria(cosmetica)
+                        .stock(65)
                         .build(),
 
-                // ACCESSORIES -> OTROS
+                // ACCESORIOS DE PLAYA
                 Producto.builder()
-                        .nombre("Apple Watch Series 9")
-                        .precio(new BigDecimal("399.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400"))
-                        .descripcion("Smartwatch más avanzado de Apple, GPS + Cellular, correa deportiva. Salud y fitness al máximo.")
-                        .categoria(otros)
-                        .stock(10)
+                        .nombre("Bolsa de Playa Tropical XXL")
+                        .precio(new BigDecimal("24.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1590739225017-e513ea9eac27?w=400",
+                            "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=400",
+                            "https://images.unsplash.com/photo-1590739225017-e513ea9eac27?w=400"))
+                        .descripcion("Bolsa grande de yute con estampado de palmeras y cocos. Resistente al agua y arena.")
+                        .categoria(accesorios)
+                        .stock(50)
                         .build(),
                 Producto.builder()
-                        .nombre("iPad Pro 12.9")
-                        .precio(new BigDecimal("1099.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400"))
-                        .descripcion("iPad Pro con M2, Apple Pencil incluido. Perfecto para diseño digital y productividad profesional.")
-                        .categoria(electronica) // iPad es electrónica
-                        .stock(8)
+                        .nombre("Toalla de Playa Paradise 180x100cm")
+                        .precio(new BigDecimal("29.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1581511919791-f76c2d86ebea?w=400",
+                            "https://images.unsplash.com/photo-1621369746-4d93e7bce70e?w=400",
+                            "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400"))
+                        .descripcion("Toalla de microfibra con diseño tropical de cocos y palmeras. Secado rápido y compacta.")
+                        .categoria(accesorios)
+                        .stock(70)
                         .build(),
                 Producto.builder()
-                        .nombre("MagSafe Charger Pack")
-                        .precio(new BigDecimal("79.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=400"))
-                        .descripcion("Cargador inalámbrico MagSafe original + soporte + cable USB-C. Carga rápida garantizada.")
-                        .categoria(otros)
-                        .stock(20)
+                        .nombre("Sombrero de Paja Tropical")
+                        .precio(new BigDecimal("18.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400",
+                            "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400",
+                            "https://images.unsplash.com/photo-1529958030586-3aae4ca485ff?w=400"))
+                        .descripcion("Sombrero artesanal de paja natural con cinta decorativa. Protección solar con estilo.")
+                        .categoria(accesorios)
+                        .stock(45)
                         .build(),
                 Producto.builder()
-                        .nombre("Anker PowerCore")
-                        .precio(new BigDecimal("45.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400"))
-                        .descripcion("Batería portátil 20.000mAh con carga rápida PD. Ideal para viajes y emergencias energéticas.")
-                        .categoria(otros)
-                        .stock(25)
+                        .nombre("Chanclas Tropical Edition")
+                        .precio(new BigDecimal("15.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400",
+                            "https://images.unsplash.com/photo-1560769680-ba4c197c6a1c?w=400",
+                            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400"))
+                        .descripcion("Chanclas cómodas con suela de caucho y diseño de cocos. Perfectas para playa y piscina.")
+                        .categoria(accesorios)
+                        .stock(90)
                         .build(),
                 Producto.builder()
-                        .nombre("Samsung Galaxy Watch")
-                        .precio(new BigDecimal("289.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"))
-                        .descripcion("Smartwatch Android con GPS, monitor cardíaco y resistencia al agua. Perfecto para fitness.")
-                        .categoria(otros)
-                        .stock(12)
+                        .nombre("Termo Tropical 500ml")
+                        .precio(new BigDecimal("22.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400",
+                            "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=400",
+                            "https://images.unsplash.com/photo-1534056958841-6f01dda98caa?w=400"))
+                        .descripcion("Botella térmica de acero inoxidable con estampado de palmeras. Mantiene frío 24h.")
+                        .categoria(accesorios)
+                        .stock(60)
                         .build(),
                 Producto.builder()
-                        .nombre("Mechanical Keyboard")
-                        .precio(new BigDecimal("149.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400"))
-                        .descripcion("Teclado mecánico RGB con switches Cherry MX Blue. Perfecto para programadores y gamers.")
-                        .categoria(otros)
-                        .stock(15)
+                        .nombre("Gafas de Sol Coconut Style")
+                        .precio(new BigDecimal("34.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400",
+                            "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400",
+                            "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400"))
+                        .descripcion("Gafas de sol con protección UV400 y montura inspirada en la naturaleza tropical.")
+                        .categoria(accesorios)
+                        .stock(55)
+                        .build(),
+
+                // DECORACIÓN TROPICAL
+                Producto.builder()
+                        .nombre("Vela Aromática Coco & Lima 300g")
+                        .precio(new BigDecimal("16.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1602874801006-597c7d10f3b7?w=400",
+                            "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=400",
+                            "https://images.unsplash.com/photo-1602874801006-597c7d10f3b7?w=400"))
+                        .descripcion("Vela de cera de soja con aroma tropical de coco y lima. 50 horas de combustión.")
+                        .categoria(bienestar)
+                        .stock(75)
                         .build(),
                 Producto.builder()
-                        .nombre("4K Webcam")
-                        .precio(new BigDecimal("89.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400"))
-                        .descripcion("Cámara web 4K con autoenfoque, ideal para streaming y videoconferencias profesionales.")
-                        .categoria(otros)
-                        .stock(10)
+                        .nombre("Difusor de Aromas Tropical Breeze")
+                        .precio(new BigDecimal("19.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1585933646398-43a092936b34?w=400",
+                            "https://images.unsplash.com/photo-1610383504713-412d6b0cd8ae?w=400",
+                            "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=400"))
+                        .descripcion("Difusor con varillas de ratán y aceite esencial de coco. Ambientación durante 3 meses.")
+                        .categoria(bienestar)
+                        .stock(50)
                         .build(),
                 Producto.builder()
-                        .nombre("Wireless Charger Stand")
-                        .precio(new BigDecimal("39.00"))
-                        .imagenes(List.of("https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400"))
-                        .descripcion("Soporte cargador inalámbrico con ventilador de refrigeración. Compatible con todos los estándares Qi.")
-                        .categoria(otros)
+                        .nombre("Cuenco Artesanal de Coco Natural")
+                        .precio(new BigDecimal("12.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400",
+                            "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=400",
+                            "https://images.unsplash.com/photo-1533910534207-90f31029a78e?w=400"))
+                        .descripcion("Bowl hecho de cáscara de coco reciclada. Ideal para smoothies, ensaladas o decoración.")
+                        .categoria(artesania)
+                        .stock(40)
+                        .build(),
+                Producto.builder()
+                        .nombre("Set de Posavasos Coco (4 unidades)")
+                        .precio(new BigDecimal("14.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1595429678249-67f8c4f9ed68?w=400",
+                            "https://images.unsplash.com/photo-1556228578-dd6a8f067c55?w=400",
+                            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400"))
+                        .descripcion("Posavasos naturales de fibra de coco con diseños tropicales grabados. Sostenibles y decorativos.")
+                        .categoria(artesania)
+                        .stock(65)
+                        .build(),
+                Producto.builder()
+                        .nombre("Maceta Colgante Tropical con Planta")
+                        .precio(new BigDecimal("27.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=400",
+                            "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400",
+                            "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400"))
+                        .descripcion("Maceta de fibra de coco con planta tropical incluida. Perfecta para interiores.")
+                        .categoria(decoracion)
+                        .stock(35)
+                        .build(),
+                Producto.builder()
+                        .nombre("Cuadro Canvas Palmeras Sunset 60x40cm")
+                        .precio(new BigDecimal("39.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1502933691298-84fc14542831?w=400",
+                            "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=400",
+                            "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400"))
+                        .descripcion("Lienzo decorativo con imagen de palmeras al atardecer. Impresión de alta calidad.")
+                        .categoria(decoracion)
                         .stock(30)
+                        .build(),
+                Producto.builder()
+                        .nombre("Guirnalda LED Cocos Decorativa")
+                        .precio(new BigDecimal("21.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400",
+                            "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=400",
+                            "https://images.unsplash.com/photo-1511578194003-00c80e42dc9b?w=400"))
+                        .descripcion("Guirnalda luminosa con cocos decorativos. 20 luces LED, perfecta para fiestas tropicales.")
+                        .categoria(decoracion)
+                        .stock(45)
+                        .build(),
+
+                // BEBIDAS Y MÁS
+                Producto.builder()
+                        .nombre("Ron Coco Premium 700ml")
+                        .precio(new BigDecimal("24.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400",
+                            "https://images.unsplash.com/photo-1560508139-7d1b6a53a2e4?w=400",
+                            "https://images.unsplash.com/photo-1556881286-fc6915169721?w=400"))
+                        .descripcion("Ron caribeño con infusión natural de coco. Perfecto para piñas coladas y cócteles tropicales.")
+                        .categoria(bebidas)
+                        .stock(50)
+                        .build(),
+                Producto.builder()
+                        .nombre("Sirope de Coco para Cócteles 500ml")
+                        .precio(new BigDecimal("9.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1575452879841-88650baaa37c?w=400",
+                            "https://images.unsplash.com/photo-1556881286-fc6915169721?w=400",
+                            "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400"))
+                        .descripcion("Sirope premium de coco para preparar mojitos, daiquiris y bebidas tropicales en casa.")
+                        .categoria(bebidas)
+                        .stock(70)
+                        .build(),
+                Producto.builder()
+                        .nombre("Té Verde con Coco 20 bolsitas")
+                        .precio(new BigDecimal("6.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400",
+                            "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400",
+                            "https://images.unsplash.com/photo-1597318110120-0977813e0656?w=400"))
+                        .descripcion("Infusión de té verde con trozos de coco natural. Antioxidante y refrescante.")
+                        .categoria(bebidas)
+                        .stock(85)
+                        .build(),
+                Producto.builder()
+                        .nombre("Mix Smoothie Tropical 250g")
+                        .precio(new BigDecimal("8.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=400",
+                            "https://images.unsplash.com/photo-1546173159-315724a31696?w=400",
+                            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400"))
+                        .descripcion("Mezcla deshidratada de mango, piña y coco para smoothies instantáneos. Solo añade agua.")
+                        .categoria(alimentos)
+                        .stock(60)
+                        .build(),
+                Producto.builder()
+                        .nombre("Chocolate con Coco Gourmet 100g")
+                        .precio(new BigDecimal("7.49"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=400",
+                            "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400",
+                            "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400"))
+                        .descripcion("Chocolate negro 70% con trozos de coco tostado. Dulce tropical para sibarita.")
+                        .categoria(alimentos)
+                        .stock(80)
+                        .build(),
+                Producto.builder()
+                        .nombre("Mermelada de Coco & Piña 300g")
+                        .precio(new BigDecimal("5.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=400",
+                            "https://images.unsplash.com/photo-1472476443507-c7a5948772fc?w=400",
+                            "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400"))
+                        .descripcion("Mermelada artesanal de coco y piña sin conservantes. Sabor intenso y tropical.")
+                        .categoria(alimentos)
+                        .stock(50)
+                        .build(),
+                Producto.builder()
+                        .nombre("Incienso Natural Aroma Coco 50 varillas")
+                        .precio(new BigDecimal("9.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=400",
+                            "https://images.unsplash.com/photo-1610383504713-412d6b0cd8ae?w=400",
+                            "https://images.unsplash.com/photo-1602874801006-597c7d10f3b7?w=400"))
+                        .descripcion("Varillas de incienso con fragancia natural de coco. Relajación y ambiente tropical.")
+                        .categoria(bienestar)
+                        .stock(70)
+                        .build(),
+                Producto.builder()
+                        .nombre("Alfombra de Baño Fibra de Coco")
+                        .precio(new BigDecimal("19.99"))
+                        .imagenes(List.of(
+                            "https://images.unsplash.com/photo-1556228578-dd6a8f067c55?w=400",
+                            "https://images.unsplash.com/photo-1595429678249-67f8c4f9ed68?w=400",
+                            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400"))
+                        .descripcion("Alfombrilla natural de fibra de coco. Absorbente, antideslizante y ecológica.")
+                        .categoria(artesania)
+                        .stock(40)
                         .build()
         );
     }

@@ -1,15 +1,15 @@
 package srangeldev.centrococotero.producto.models;
 
 public enum TipoCategoria {
-    ELECTRONICA("Electrónica"),
-    ROPA("Ropa y Moda"),
-    HOGAR("Hogar y Jardín"),
-    DEPORTES("Deportes y Fitness"),
-    LIBROS("Libros y Papelería"),
-    JUGUETES("Juguetes y Juegos"),
-    BELLEZA("Belleza y Cuidado Personal"),
-    ALIMENTACION("Alimentación"),
-    MASCOTAS("Mascotas"),
+    ALIMENTOS_TROPICALES("Alimentos y Snacks Tropicales"),
+    BEBIDAS("Bebidas Tropicales"),
+    COSMETICA_NATURAL("Cosmética Natural"),
+    ACEITES_DERIVADOS("Aceites y Derivados de Coco"),
+    ACCESORIOS_PLAYA("Accesorios de Playa"),
+    DECORACION_TROPICAL("Decoración Tropical"),
+    TEXTIL_VERANO("Textil y Verano"),
+    BIENESTAR("Bienestar y Aromas"),
+    ARTESANIA("Artesanía Tropical"),
     OTROS("Otros");
 
     private final String descripcion;

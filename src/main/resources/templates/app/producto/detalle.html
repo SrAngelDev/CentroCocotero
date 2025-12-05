@@ -8,123 +8,179 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/styles-navbar.css">
+    <style>
+        /* Estilo para resaltar la miniatura seleccionada */
+        .thumbnail.active {
+            border: 3px solid #0d6efd; /* Color primario de Bootstrap */
+            opacity: 1;
+        }
+        .thumbnail {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        .thumbnail:hover {
+            opacity: 1;
+        }
+        /* Contenedor para miniaturas con scroll horizontal si hay muchas */
+        .thumbnails-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            /* Ocultar barra de scroll fea en algunos navegadores */
+            scrollbar-width: thin;
+        }
+    </style>
 </head>
 <body>
-    {% include "fragments/navbar" %}
+{% include "fragments/navbar" %}
 
-    <main class="container my-5" style="padding-top: 80px;">
-        <div class="row">
-            <!-- Imagen del producto -->
-            <div class="col-md-6 mb-4">
-                <div class="product-image-container">
-                    {% if producto.imagenes is not null and producto.imagenes is not empty %}
-                        <img src="{{ producto.imagenes[0] }}" class="img-fluid rounded shadow" alt="{{ producto.nombre }}" style="width: 100%; max-height: 500px; object-fit: cover;">
-                    {% else %}
-                        <img src="https://via.placeholder.com/500x500?text=Sin+Imagen" class="img-fluid rounded shadow" alt="Sin imagen">
-                    {% endif %}
+<main class="container my-5" style="padding-top: 80px;">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="product-image-container">
+                {% if producto.imagenes is not null and producto.imagenes is not empty %}
+
+                <div class="mb-3">
+                    <img id="mainImage" src="{{ producto.imagenes[0] }}" class="img-fluid rounded shadow w-100" style="height: 500px; object-fit: cover;" alt="{{ producto.nombre }}">
                 </div>
-            </div>
 
-            <!-- Detalles del producto -->
-            <div class="col-md-6">
-                <div class="product-details">
-                    <h1 class="mb-3">{{ producto.nombre }}</h1>
-                    
-                    {% if producto.categoria is not null %}
-                    <p class="text-muted mb-2">
-                        <i class="fas fa-tag"></i> Categoría: <strong>{{ producto.categoria.nombre }}</strong>
-                    </p>
-                    {% endif %}
-
-                    <div class="product-price-detail mb-4">
-                        <h2 class="text-success">{{ producto.precio }}€</h2>
-                    </div>
-
-                    <div class="stock-info mb-4">
-                        {% if producto.stock > 0 %}
-                            <span class="badge bg-success">
-                                <i class="fas fa-check-circle"></i> En stock: {{ producto.stock }} unidades
-                            </span>
-                        {% else %}
-                            <span class="badge bg-danger">
-                                <i class="fas fa-times-circle"></i> Sin stock
-                            </span>
-                        {% endif %}
-                    </div>
-
-                    <div class="product-description mb-4">
-                        <h5>Descripción</h5>
-                        <p>{{ producto.descripcion|default('Sin descripción disponible') }}</p>
-                    </div>
-
-                    <div class="product-actions d-flex gap-3">
-                        {% if producto.stock > 0 %}
-                        <button class="btn btn-primary btn-lg flex-grow-1">
-                            <i class="fas fa-shopping-cart"></i> Añadir al carrito
-                        </button>
-                        {% else %}
-                        <button class="btn btn-secondary btn-lg flex-grow-1" disabled>
-                            <i class="fas fa-ban"></i> No disponible
-                        </button>
-                        {% endif %}
-                        
-                        <button class="btn btn-outline-danger btn-lg">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="admin-actions">
-                        <a href="/app/productos/editar/{{ producto.id }}" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-edit"></i> Editar producto
-                        </a>
-                        <a href="/app/productos/eliminar/{{ producto.id }}" class="btn btn-outline-danger" 
-                           onclick="return confirm('¿Estás seguro de eliminar este producto?')">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </a>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="/app/productos" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left"></i> Volver al catálogo
-                        </a>
-                    </div>
+                {% if producto.imagenes|length > 1 %}
+                <div class="thumbnails-container">
+                    {% for imagen in producto.imagenes %}
+                    <img src="{{ imagen }}"
+                         class="thumbnail rounded img-thumbnail {{ loop.first ? 'active' : '' }}"
+                         style="width: 100px; height: 100px; object-fit: cover;"
+                         onclick="changeImage(this.src, this)"
+                         alt="Vista miniatura {{ loop.index }}">
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
+                {% endif %}
 
-        <!-- Sección adicional: Productos relacionados -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <h3 class="mb-4">Productos relacionados</h3>
-                {% if productosRelacionados is not null and productosRelacionados is not empty %}
-                    <div class="row g-4">
-                        {% for productoRel in productosRelacionados %}
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="product-card" style="cursor: pointer;" onclick="window.location.href='/app/productos/detalle/{{ productoRel.id }}'">
-                                {% if productoRel.imagenes is not null and productoRel.imagenes is not empty %}
-                                    <img src="{{ productoRel.imagenes[0] }}" class="img-fluid rounded mb-3" alt="{{ productoRel.nombre }}">
-                                {% else %}
-                                    <img src="https://via.placeholder.com/300x300?text=Sin+Imagen" class="img-fluid rounded mb-3" alt="Sin imagen">
-                                {% endif %}
-                                
-                                <h5 class="text-center">{{ productoRel.nombre }}</h5>
-                                <p class="text-muted text-center text-truncate" style="max-width: 100%;">{{ productoRel.descripcion }}</p>
-                                <span class="product-price">{{ productoRel.precio }}€</span>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
                 {% else %}
-                    <p class="text-muted">No hay productos relacionados disponibles en esta categoría.</p>
+                {# Fallback si no hay imágenes #}
+                <img src="{{ asset('ruta/a/imagen_por_defecto.jpg') }}" class="img-fluid rounded shadow w-100" style="height: 500px; object-fit: cover;" alt="Imagen no disponible">
                 {% endif %}
             </div>
         </div>
-    </main>
 
-    {% include "fragments/footer" %}
+        <div class="col-md-6">
+            <div class="product-details">
+                <h1 class="mb-3">{{ producto.nombre }}</h1>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                {% if producto.categoria is not null %}
+                <p class="text-muted mb-2">
+                    <i class="fas fa-tag"></i> Categoría: <strong>{{ producto.categoria.nombre }}</strong>
+                </p>
+                {% endif %}
+
+                <div class="product-price-detail mb-4">
+                    <h2 class="text-success">{{ producto.precio }}€</h2>
+                </div>
+
+                <div class="stock-info mb-4">
+                    {% if producto.stock > 0 %}
+                    <span class="badge bg-success">
+                                <i class="fas fa-check-circle"></i> En stock: {{ producto.stock }} unidades
+                            </span>
+                    {% else %}
+                    <span class="badge bg-danger">
+                                <i class="fas fa-times-circle"></i> Sin stock
+                            </span>
+                    {% endif %}
+                </div>
+
+                <div class="product-description mb-4">
+                    <h5>Descripción</h5>
+                    <p>{{ producto.descripcion|default('Sin descripción disponible') }}</p>
+                </div>
+
+                <div class="product-actions d-flex gap-3">
+                    {% if producto.stock > 0 %}
+                    <button class="btn btn-primary btn-lg flex-grow-1">
+                        <i class="fas fa-shopping-cart"></i> Añadir al carrito
+                    </button>
+                    {% else %}
+                    <button class="btn btn-secondary btn-lg flex-grow-1" disabled>
+                        <i class="fas fa-ban"></i> No disponible
+                    </button>
+                    {% endif %}
+
+                    <button class="btn btn-outline-danger btn-lg">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="admin-actions">
+                    <a href="/app/productos/editar/{{ producto.id }}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-edit"></i> Editar producto
+                    </a>
+                    <a href="/app/productos/eliminar/{{ producto.id }}" class="btn btn-outline-danger"
+                       onclick="return confirm('¿Estás seguro de eliminar este producto?')">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </a>
+                </div>
+
+                <div class="mt-4">
+                    <a href="/app/productos" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver al catálogo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="mb-4">Productos relacionados</h3>
+            {% if productosRelacionados is not null and productosRelacionados is not empty %}
+            <div class="row g-4">
+                {% for productoRel in productosRelacionados %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-card" style="cursor: pointer;" onclick="window.location.href='/app/productos/detalle/{{ productoRel.id }}'">
+                        {% if productoRel.imagenes is not null and productoRel.imagenes is not empty %}
+                        <img src="{{ productoRel.imagenes[0] }}" class="img-fluid rounded mb-3" alt="{{ productoRel.nombre }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/300x300?text=Sin+Imagen" class="img-fluid rounded mb-3" alt="Sin imagen">
+                        {% endif %}
+
+                        <h5 class="text-center">{{ productoRel.nombre }}</h5>
+                        <p class="text-muted text-center text-truncate" style="max-width: 100%;">{{ productoRel.descripcion }}</p>
+                        <span class="product-price">{{ productoRel.precio }}€</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted">No hay productos relacionados disponibles en esta categoría.</p>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+{% include "fragments/footer" %}
+
+<script>
+    function changeImage(src, thumbnailElement) {
+        // 1. Cambiar la imagen principal
+        const mainImage = document.getElementById('mainImage');
+        if (mainImage) {
+            mainImage.src = src;
+        }
+
+        // 2. Gestionar la clase 'active' en las miniaturas
+        // Primero, quitamos la clase 'active' de todas las miniaturas
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+
+        // Luego, añadimos la clase 'active' a la miniatura en la que se hizo clic
+        thumbnailElement.classList.add('active');
+    }
+</script>
 </body>
 </html>
