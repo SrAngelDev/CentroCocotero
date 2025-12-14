@@ -62,6 +62,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     //testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("io.pebbletemplates:pebble-spring-boot-starter:3.2.2")
+    implementation("io.pebbletemplates:pebble:3.2.2")
 }
 
 tasks.withType<Test> {

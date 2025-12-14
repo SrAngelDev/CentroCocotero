@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Base de datos SQL (Productos)
+  postgres:
+    image: postgres:15
+    container_name: cocotero_postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: centrococotero
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    volumes:
+      # CAMBIO CLAVE: Hemos cambiado el nombre para forzar una BD limpia
+      - postgres_data_NUEVO:/var/lib/postgresql/data
+    restart: always
+
+  # Base de datos NoSQL (Comentarios)
+  mongo:
+    image: mongo:latest
+    container_name: cocotero_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data_NUEVO:/data/db
+    restart: always
+
+volumes:
+  # Definimos los volúmenes nuevos
+  postgres_data_NUEVO:
+  mongo_data_NUEVO:

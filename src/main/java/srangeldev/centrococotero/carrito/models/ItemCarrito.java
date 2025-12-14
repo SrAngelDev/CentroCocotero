@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import srangeldev.centrococotero.producto.models.Producto;
 import srangeldev.centrococotero.usuario.models.Usuario;
-import srangeldev.centrococotero.utils.Utils;
 
 import java.math.BigDecimal;
 
@@ -38,8 +37,5 @@ public class ItemCarrito {
     @NotNull(message = "El precio unitario es obligatorio")
     private BigDecimal precioUnitario;
 
-    @PrePersist
-    protected void onCreate() {
-        if (this.id == null) this.id = Utils.generadorId();
-    }
+
 }

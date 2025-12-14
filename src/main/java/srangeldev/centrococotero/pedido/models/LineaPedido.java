@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import srangeldev.centrococotero.producto.models.Producto;
-import srangeldev.centrococotero.utils.Utils;
 
 import java.math.BigDecimal;
 
@@ -43,8 +42,4 @@ public class LineaPedido {
     @NotNull(message = "El subtotal es obligatorio")
     private BigDecimal subtotal;
 
-    @PrePersist
-    protected void onCreate() {
-        if (this.id == null) this.id = Utils.generadorId();
-    }
 }

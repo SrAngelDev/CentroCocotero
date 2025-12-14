@@ -1,28 +1,30 @@
 package srangeldev.centrococotero.producto.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "comentarios")
 public class Comentario {
 
     @Id
     private String id;
 
-    private String productoId; // Referencia al Producto (Postgres)
-    private String usuarioId;  // Referencia al Usuario (Postgres)
+    private String productoId;
+    private String usuarioId;
 
-    // Guardamos el username aquí para no tener que buscarlo en Postgres
-    // cada vez que mostramos los comentarios (Desnormalización aceptable en NoSQL)
     private String username;
 
     private String texto;
-    private int puntuacion; // 1 a 5 estrellas
+    private int puntuacion;
 
     private LocalDateTime fecha;
 }

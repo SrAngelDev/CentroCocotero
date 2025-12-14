@@ -3,7 +3,6 @@ package srangeldev.centrococotero.producto.models;
 import jakarta.persistence.*;
 import lombok.*;
 import srangeldev.centrococotero.usuario.models.Usuario;
-import srangeldev.centrococotero.utils.Utils;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +27,6 @@ public class Favorito {
 
     @PrePersist
     protected void onCreate() {
-        if (this.id == null) this.id = Utils.generadorId();
         if (this.fechaAgregado == null) this.fechaAgregado = LocalDateTime.now();
     }
 }
