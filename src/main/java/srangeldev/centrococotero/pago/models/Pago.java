@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import srangeldev.centrococotero.pedido.models.Pedido;
 import srangeldev.centrococotero.usuario.models.Usuario;
-import srangeldev.centrococotero.utils.Utils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -64,7 +63,6 @@ public class Pago {
 
     @PrePersist
     protected void onCreate() {
-        if (this.id == null) this.id = Utils.generadorId();
         if (this.fechaPago == null) this.fechaPago = LocalDateTime.now();
         if (this.estado == null) this.estado = EstadoPago.PENDIENTE;
     }

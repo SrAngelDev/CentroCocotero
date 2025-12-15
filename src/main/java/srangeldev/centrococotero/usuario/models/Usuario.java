@@ -3,7 +3,6 @@ package srangeldev.centrococotero.usuario.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import srangeldev.centrococotero.utils.Utils;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -47,9 +46,4 @@ public class Usuario {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        if (this.id == null) this.id = Utils.generadorId();
-        if (this.createdAt == null) this.createdAt = LocalDateTime.now();
-    }
 }
