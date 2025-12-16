@@ -58,7 +58,7 @@
 
     <h2 class="text-center mb-5"> DESCUBRE NUESTROS PRODUCTOS: </h2>
 
-    <section class="row g-4">
+    <section class="row g-1">
 
         {% for producto in productos %}
         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
@@ -79,13 +79,19 @@
                 <span class="categoria-producto">{{ producto.categoria}}</span><br>
                 <span class="precio-producto">{{ producto.precio }}€</span>
 
-                <a href="/producto/{{ producto.id }}" class="btn btn-primary w-100 mt-3">
-                    <i class="fas fa-eye me-2"></i> Ver Detalles
-                </a>
+                <div class="d-flex gap-2 mt-2">
+                    <a href="/producto/{{ producto.id }}" class="btn btn-primary flex-fill">
+                        <i class="fas fa-eye"></i>
+                    </a>
 
-                <a href="/carrito/agregar/{{ producto.id }}" class="btn btn-carrito w-100 mt-2">
-                    <i class="fas fa-shopping-cart me-2"></i> Añadir al Carrito
-                </a>
+                    <a href="/carrito/agregar/{{ producto.id }}" class="btn btn-carrito flex-fill">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+
+                    <a href="/carrito/agregar/{{ producto.id }}" class="btn btn-favoritos flex-fill">
+                        <i class="fa-solid fa-heart"></i>
+                    </a>
+                </div>
             </div>
         </div>
         {% else %}
@@ -96,10 +102,11 @@
         {% endfor %}
     </section>
 
-    <div class="text-center mt-5">
-        <button class="btn btn-primary btn-lg shadow">Cargar Más Productos <i class="fas fa-redo-alt ms-2"></i></button>
+    <div class="d-flex justify-content-center mt-5">
+        <button class="btn btn-primary btn-lg shadow">
+            Cargar Más Productos <i class="fas fa-redo-alt ms-2"></i>
+        </button>
     </div>
-
 </main>
 
 {% include 'fragments/footer' %}
