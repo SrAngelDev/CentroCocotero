@@ -1,14 +1,29 @@
 package srangeldev.centrococotero.utils;
 
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.id.IdentifierGenerator;
+
+import java.io.Serializable;
 import java.security.SecureRandom;
-import java.util.Base64;
+import java.util.Random;
 
-public class Utils {
-    private static final SecureRandom random = new SecureRandom();
+public class Utils implements IdentifierGenerator {
 
-    public static String generadorId() {
-        byte[] bytes = new byte[8];
-        random.nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    private static final String REGEX = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+    private static final int LONGITUD = 11;
+
+    public Serializable generateYoutubeId() {
+        StringBuilder sb = new StringBuilder(LONGITUD);
+        for (int i = 0; i < LONGITUD; i++) {
+            sb.append(REGEX.charAt(new Random().nextInt(REGEX.length())));
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public Object generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) {
+        return generateYoutubeId();
     }
 }
+
+

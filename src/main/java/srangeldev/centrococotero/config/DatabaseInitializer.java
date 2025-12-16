@@ -1,64 +1,82 @@
 package srangeldev.centrococotero.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import srangeldev.centrococotero.data.DataFactory;
-import srangeldev.centrococotero.producto.models.Categoria;
-import srangeldev.centrococotero.producto.models.Producto;
-import srangeldev.centrococotero.producto.models.TipoCategoria;
-import srangeldev.centrococotero.producto.repositories.CategoriaRepository;
-import srangeldev.centrococotero.producto.repositories.ProductoRepository;
-import srangeldev.centrococotero.usuario.models.Usuario;
-import srangeldev.centrococotero.usuario.repositories.UsuarioRepository;
+import srangeldev.centrococotero.models.Producto;
+import srangeldev.centrococotero.models.TipoCategoria;
+import srangeldev.centrococotero.repositories.ProductoRepository;
 
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Component
-@Slf4j
 public class DatabaseInitializer implements CommandLineRunner {
 
-    private final UsuarioRepository usuarioRepository;
-    private final ProductoRepository productoRepository;
-    private final CategoriaRepository categoriaRepository;
-
     @Autowired
-    public DatabaseInitializer(UsuarioRepository usuarioRepository, ProductoRepository productoRepository, CategoriaRepository categoriaRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.productoRepository = productoRepository;
-        this.categoriaRepository = categoriaRepository;
-    }
+    private ProductoRepository productoRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        if (usuarioRepository.count() == 0) {
-            log.info("Iniciando carga de datos de prueba...");
 
-            // 1. Crear Categorías
-            Map<TipoCategoria, Categoria> categorias = new HashMap<>();
-            for (TipoCategoria tipo : TipoCategoria.values()) {
-                Categoria categoria = Categoria.builder().tipo(tipo).build();
-                categorias.put(tipo, categoriaRepository.save(categoria));
-            }
-            log.info("Categorías creadas: {}", categorias.size());
+        if (productoRepository.count() == 0) {
+            System.out.println("🥥 Iniciando carga de productos de prueba...");
 
-            // 2. Crear Usuarios
-            List<Usuario> usuarios = DataFactory.createTestUsers();
-            usuarioRepository.saveAll(usuarios);
-            log.info("Usuarios creados: {}", usuarios.size());
+            productoRepository.saveAll(List.of(
+                    // PRODUCTO 1: Bebida
+                    Producto.builder()
+                            .nombre("Coco Fresco Premium")
+                            .descripcion("Coco recién caído de la palmera, lleno de agua refrescante y electrolitos naturales. Perfecto para hidratarse en verano.")
+                            .precio(new BigDecimal("4.50"))
+                            .stock(50)
+                            .categoria(TipoCategoria.BEBIDAS)
+                            .imagenes(List.of("/images/logo.png"))
+                            .build(),
 
-            // 3. Crear Productos
-            List<Producto> productos = DataFactory.createTestProducts(categorias);
-            productoRepository.saveAll(productos);
-            log.info("Productos creados: {}", productos.size());
+                    // PRODUCTO 2: Aceite
+                    Producto.builder()
+                            .nombre("Aceite de Coco Virgen Extra")
+                            .descripcion("Ideal para cocinar, hidratar la piel o cuidar tu cabello. 100% orgánico y prensado en frío.")
+                            .precio(new BigDecimal("12.99"))
+                            .stock(30)
+                            .categoria(TipoCategoria.ACEITES_DERIVADOS)
+                            .imagenes(List.of("/images/logo.png"))
+                            .build(),
 
-            log.info("Carga de datos completada.");
+                    // PRODUCTO 3: Fruta
+                    Producto.builder()
+                            .nombre("Pack Piña Gold Hawaiana")
+                            .descripcion("Tres piñas dulces y jugosas traídas directamente de islas volcánicas. Sabor intenso garantizado.")
+                            .precio(new BigDecimal("8.75"))
+                            .stock(20)
+                            .categoria(TipoCategoria.ALIMENTOS_TROPICALES)
+                            .imagenes(List.of("/images/logo.png"))
+                            .build(),
+
+                    // PRODUCTO 4: Cosmética
+                    Producto.builder()
+                            .nombre("Jabón Artesanal de Coco y Vainilla")
+                            .descripcion("Suavidad extrema para tu piel con aroma relajante tropical. Hecho a mano sin parabenos.")
+                            .precio(new BigDecimal("6.20"))
+                            .stock(100)
+                            .categoria(TipoCategoria.COSMETICA_NATURAL)
+                            .imagenes(List.of("/images/logo.png"))
+                            .build(),
+
+                    // PRODUCTO 5: Ropa
+                    Producto.builder()
+                            .nombre("Camisa Hawaiana 'Sunset'")
+                            .descripcion("Estilo y frescura para el verano. Tela transpirable y diseño único de palmeras al atardecer.")
+                            .precio(new BigDecimal("25.00"))
+                            .stock(15)
+                            .categoria(TipoCategoria.TEXTIL_VERANO)
+                            .imagenes(List.of("/images/logo.png"))
+                            .build()
+            ));
+
+            System.out.println("¡PRODUCTOS CARGADOS EN LA BASE DE DATOS!");
         } else {
-            log.info("La base de datos ya contiene datos. Se omite la carga inicial.");
+            System.out.println("La base de datos ya tiene productos. No se han creado nuevos.");
         }
     }
 }
