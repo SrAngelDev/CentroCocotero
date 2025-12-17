@@ -24,9 +24,9 @@ public class LoginController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/welcome")
     public String welcome() {
-        return "redirect:/auth/login";
+        return "redirect:/";
     }
 
     @GetMapping("/auth/login")
