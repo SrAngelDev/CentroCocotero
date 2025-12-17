@@ -16,22 +16,18 @@ import srangeldev.centrococotero.services.ProductoService;
 import java.util.List;
 
 @Controller
-@RequestMapping("")
 @RequiredArgsConstructor
 public class ProductoController {
 
     private final ProductoService service;
-
-    // Inyectamos el repo de usuarios para saber quién da like
     private final UserRepository usuarioRepository;
 
-    @GetMapping
+    @GetMapping("/")
     public String inicio(Model model,
                          @RequestParam(required = false) String busqueda,
                          @RequestParam(required = false) TipoCategoria categoria,
                          @RequestParam(required = false) java.math.BigDecimal precioMin,
                          @RequestParam(required = false) java.math.BigDecimal precioMax,
-                         // CAMBIO: Usamos 'cantidad' en vez de 'page'. Por defecto 8.
                          @RequestParam(defaultValue = "8") int cantidad) {
 
         List<Producto> productos;
@@ -112,7 +108,6 @@ public class ProductoController {
         return "redirect:/producto/" + id;
     }
 
-    // FAVORITOS
     // FAVORITOS
     @PostMapping("/favoritos/toggle/{id}")
     public String toggleFavorito(@PathVariable("id") String productoId,

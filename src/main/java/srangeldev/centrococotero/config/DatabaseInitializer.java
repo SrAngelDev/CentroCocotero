@@ -19,11 +19,9 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // 1. ¡IMPORTANTE! BORRAMOS TODO LO ANTIGUO PARA EMPEZAR LIMPIO
         System.out.println("🧹 Borrando productos antiguos...");
         productoRepository.deleteAll();
 
-        // 2. AHORA SÍ, CARGAMOS LOS 20 NUEVOS
         System.out.println("🥥 Iniciando carga masiva de productos (20 items)...");
 
         productoRepository.saveAll(List.of(
