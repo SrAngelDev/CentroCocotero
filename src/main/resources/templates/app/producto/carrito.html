@@ -34,7 +34,7 @@
 
   <h2 class="mb-4"><i class="fas fa-coconut"></i> Tu Carrito de Compras</h2>
 
-  {% if carrito is empty %}
+  {% if items is empty %}
   <div class="text-center py-5">
     <div class="mb-3">
       <i class="fas fa-shopping-basket fa-4x text-muted"></i>
@@ -45,41 +45,72 @@
   </div>
   {% else %}
 
+  <!-- Mensajes de éxito/error -->
+  {% if success %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i>{{ success }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endif %}
+  {% if error %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endif %}
+
   <div class="row g-4">
     <div class="col-lg-8">
 
-      {% for linea in carrito %}
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">{{ items | length }} productos en tu carrito</h5>
+        <a href="/carrito/vaciar" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Vaciar todo el carrito?');">
+          <i class="fas fa-trash me-1"></i>Vaciar carrito
+        </a>
+      </div>
+
+      {% for item in items %}
       <div class="item-carrito p-3 mb-3 d-flex align-items-center flex-wrap flex-md-nowrap gap-3 border rounded shadow-sm">
 
-        {% if linea.producto.imagenes is not empty %}
-        <img src="{{ linea.producto.imagenes[0] }}" alt="{{ linea.producto.nombre }}" class="img-carrito flex-shrink-0">
+        {% if item.producto.imagenes is not empty %}
+        <img src="{{ item.producto.imagenes[0] }}" alt="{{ item.producto.nombre }}" class="img-carrito flex-shrink-0">
         {% else %}
         <img src="/images/logo.png" alt="Sin imagen" class="img-carrito flex-shrink-0">
         {% endif %}
 
         <div class="flex-grow-1">
           <h5 class="mb-1 fw-bold" style="font-family: 'Fredoka'">
-            <a href="/producto/{{ linea.producto.id }}" class="text-decoration-none text-dark">
-              {{ linea.producto.nombre }}
+            <a href="/producto/{{ item.producto.id }}" class="text-decoration-none text-dark">
+              {{ item.producto.nombre }}
             </a>
           </h5>
-          <small class="text-muted">Precio unidad: {{ linea.producto.precio | numberformat("#,##0.00") }}€</small>
+          <small class="text-muted">Precio unidad: {{ item.precioUnitario | numberformat("#,##0.00") }}€</small>
+          <br>
+          <small class="text-muted">Stock disponible: {{ item.producto.stock }}</small>
         </div>
 
         <div class="d-flex align-items-center gap-2">
-          <label class="small fw-bold">Cant:</label>
-          <input type="number" class="form-control cantidad-input" value="{{ linea.cantidad }}" min="1" readonly>
+          <form action="/carrito/actualizar/{{ item.id }}" method="post" class="d-flex align-items-center gap-2">
+            <input type="hidden" name="_csrf" value="{{ _csrf.token }}" />
+            <button type="submit" name="cantidad" value="{{ item.cantidad - 1 }}" class="btn btn-sm btn-outline-secondary" {{ item.cantidad <= 1 ? 'disabled' : '' }}>
+              <i class="fas fa-minus"></i>
+            </button>
+            <input type="number" class="form-control cantidad-input" value="{{ item.cantidad }}" min="1" max="{{ item.producto.stock }}" readonly>
+            <button type="submit" name="cantidad" value="{{ item.cantidad + 1 }}" class="btn btn-sm btn-outline-secondary" {{ item.cantidad >= item.producto.stock ? 'disabled' : '' }}>
+              <i class="fas fa-plus"></i>
+            </button>
+          </form>
         </div>
 
-        <div class="text-end" style="min-width: 80px;">
+        <div class="text-end" style="min-width: 100px;">
           <h5 class="mb-0 text-success fw-bold">
-            {{ (linea.producto.precio * linea.cantidad) | numberformat("#,##0.00") }}€
+            {{ (item.precioUnitario * item.cantidad) | numberformat("#,##0.00") }}€
           </h5>
         </div>
 
         <div class="ms-md-2 text-center">
-          <a href="/carrito/eliminar/{{ linea.producto.id }}" class="text-danger" onclick="return confirm('¿Quitar este producto?');">
-            <i class="fas fa-trash-alt fa-lg btn-eliminar"></i>
+          <a href="/carrito/eliminar/{{ item.id }}" class="text-danger" onclick="return confirm('¿Quitar este producto?');">
+            <i class="fas fa-trash-alt fa-lg"></i>
           </a>
         </div>
       </div>

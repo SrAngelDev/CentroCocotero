@@ -1,6 +1,7 @@
 package srangeldev.centrococotero.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import srangeldev.centrococotero.models.Favorito;
 import srangeldev.centrococotero.models.Producto;
 import srangeldev.centrococotero.models.Usuario;
+import srangeldev.centrococotero.services.CarritoService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +19,9 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalDataController {
+
+    @Autowired
+    private CarritoService carritoService;
 
     @ModelAttribute("_csrf")
     public CsrfToken csrfToken(HttpServletRequest request) {
@@ -33,6 +38,15 @@ public class GlobalDataController {
             }
         }
         return null;
+    }
+
+    @ModelAttribute("cantidadCarrito")
+    public int getCantidadCarrito() {
+        Usuario usuario = getUsuarioLogueado();
+        if (usuario != null) {
+            return carritoService.contarItems(usuario.getId());
+        }
+        return 0;
     }
 
     @ModelAttribute("favoritos")

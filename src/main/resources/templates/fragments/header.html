@@ -153,8 +153,13 @@
                     </div>
                 </div>
 
-                <a href="#" class="btn btn-icono-personalizado">
+                <a href="/carrito" class="btn btn-icono-personalizado position-relative">
                     <i class="fas fa-shopping-cart"></i>
+                    {% if cantidadCarrito > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7rem;">
+                        {{ cantidadCarrito }}
+                    </span>
+                    {% endif %}
                 </a>
 
                 {% if usuarioLogueado is not null %}
