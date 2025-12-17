@@ -157,17 +157,41 @@
                     <i class="fas fa-shopping-cart"></i>
                 </a>
 
+                {% if usuarioLogueado is not null %}
                 <div class="dropdown">
                     <a class="btn btn-icono-personalizado" href="#" role="button" id="menuUsuario" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle fa-lg"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow mt-2" aria-labelledby="menuUsuario">
+                        <li><h6 class="dropdown-header">Hola, {{ usuarioLogueado.nombre }}</h6></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user-alt fa-fw me-2"></i>Ver Perfil</a></li>
+                        
+                        {% set esAdmin = false %}
+                        {% for auth in usuarioLogueado.authorities %}
+                            {% if auth.authority == 'ADMIN' %}
+                                {% set esAdmin = true %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if esAdmin %}
                         <li><a class="dropdown-item text-primary" href="/admin/productos"><i class="fas fa-tachometer-alt fa-fw me-2"></i>Panel de Admin</a></li>
+                        {% endif %}
+                        
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt fa-fw me-2"></i>Cerrar Sesión</a></li>
+                        <li>
+                             <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
+                             </form>
+                             <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt fa-fw me-2"></i>Cerrar Sesión
+                             </a>
+                        </li>
                     </ul>
                 </div>
+                {% else %}
+                <a href="/auth/login" class="btn btn-primary btn-sm ms-2 rounded-pill px-3">
+                    <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
+                </a>
+                {% endif %}
 
             </div>
         </div>

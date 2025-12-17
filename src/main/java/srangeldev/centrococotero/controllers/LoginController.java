@@ -30,24 +30,59 @@ public class LoginController {
     }
 
     @GetMapping("/auth/login")
-    public String login(Model model) {
+    public String login(@RequestParam(value = "error", required = false) String error,
+                       @RequestParam(value = "registered", required = false) String registered,
+                       @RequestParam(value = "emailExists", required = false) String emailExists,
+                       Model model) {
         // CSRF token is handled by GlobalControllerAdvice
         // Para el formulario de registro
         model.addAttribute("usuario", new Usuario());
+        if (error != null) {
+            model.addAttribute("loginError", "Email o contraseña incorrectos");
+        }
+        if (registered != null) {
+            model.addAttribute("registroExitoso", "true");
+        }
+        if (emailExists != null) {
+            model.addAttribute("emailExistente", "true");
+        }
         return "login";
     }
 
     @PostMapping("/auth/register")
     public String register(@ModelAttribute Usuario usuario,
-                           @RequestParam("file") MultipartFile file) {
-        if (!file.isEmpty()) {
+                           @RequestParam(value = "file", required = false) MultipartFile file) {
+        
+        System.out.println("=== REGISTRO DE USUARIO ===");
+        System.out.println("Email: " + usuario.getEmail());
+        System.out.println("Nombre: " + usuario.getNombre());
+        System.out.println("Apellidos: " + usuario.getApellidos());
+        System.out.println("Password (sin encriptar): " + usuario.getPassword());
+        
+        // Validar si el email ya existe
+        if (usuarioServicio.buscarPorEmail(usuario.getEmail()) != null) {
+            System.out.println("❌ Email ya existe en la base de datos");
+            return "redirect:/auth/login?emailExists=true";
+        }
+        
+        // Establecer valores por defecto
+        usuario.setDeleted(false);
+        
+        if (file != null && !file.isEmpty()) {
             String imagen = storageService.store(file);
             usuario.setAvatar(MvcUriComponentsBuilder
                     .fromMethodName(FilesController.class, "serveFile", imagen)
                     .build().toUriString());
+        } else {
+            // Avatar por defecto si no se sube imagen
+            usuario.setAvatar("/images/logo.png");
         }
 
-        usuarioServicio.registrar(usuario);
-        return "redirect:/auth/login";
+        Usuario usuarioGuardado = usuarioServicio.registrar(usuario);
+        System.out.println("✅ Usuario registrado con ID: " + usuarioGuardado.getId());
+        System.out.println("Password encriptado: " + usuarioGuardado.getPassword());
+        System.out.println("Deleted: " + usuarioGuardado.getDeleted());
+        
+        return "redirect:/auth/login?registered=true";
     }
 }

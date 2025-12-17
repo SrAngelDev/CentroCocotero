@@ -15,41 +15,45 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
- ;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository ) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
-    @CacheEvict(value = "usuarios", allEntries = true)
+    // @CacheEvict(value = "usuarios", allEntries = true)
     public Usuario registrar(Usuario u) {
-       // u.setPassword(passwordEncoder.encode(u.getPassword())); TODO hacer el encoder de password
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        if (u.getRol() == null || u.getRol().isEmpty()) {
+            u.setRol("USER");
+        }
         return userRepository.save(u);
     }
 
-    @Cacheable(value = "usuarios", key = "#id")
+    // @Cacheable(value = "usuarios", key = "#id")
     public Usuario findById(long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    @Cacheable(value = "usuarios", key = "#email")
+    // @Cacheable(value = "usuarios", key = "#email")
     public Usuario buscarPorEmail(String email) {
         return userRepository.findFirstByEmail(email);
     }
 
-    @Cacheable(value = "usuarios")
+    // @Cacheable(value = "usuarios")
     public java.util.List<Usuario> findAll() {
         return userRepository.findAllActive();
     }
 
-    @CacheEvict(value = "usuarios", allEntries = true)
+    // @CacheEvict(value = "usuarios", allEntries = true)
     public Usuario editar(Usuario u) {
         return userRepository.save(u);
     }
 
-    @CacheEvict(value = "usuarios", allEntries = true)
+    // @CacheEvict(value = "usuarios", allEntries = true)
     public void borrar(Long id) {
         userRepository.deleteById(id);
     }
@@ -58,7 +62,7 @@ public class UserService {
         return userRepository.findActiveById(id);
     }
 
-    @CacheEvict(value = "usuarios", allEntries = true)
+    // @CacheEvict(value = "usuarios", allEntries = true)
     public void softDelete(Long id, String deletedBy) {
         Usuario user = findById(id);
         if (user != null) {

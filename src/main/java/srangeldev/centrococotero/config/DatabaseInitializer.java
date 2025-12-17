@@ -2,10 +2,13 @@ package srangeldev.centrococotero.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import srangeldev.centrococotero.models.Producto;
 import srangeldev.centrococotero.models.TipoCategoria;
+import srangeldev.centrococotero.models.Usuario;
 import srangeldev.centrococotero.repositories.ProductoRepository;
+import srangeldev.centrococotero.repositories.UserRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,9 +19,86 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
 
+        // ===== USUARIOS DE PRUEBA =====
+        System.out.println("👥 Borrando usuarios antiguos...");
+        userRepository.deleteAll();
+
+        System.out.println("👥 Creando usuarios de prueba...");
+        
+        // Usuario ADMIN
+        Usuario admin = Usuario.builder()
+                .nombre("Admin")
+                .apellidos("Sistema")
+                .email("admin@centrococotero.com")
+                .password(passwordEncoder.encode("admin123"))
+                .rol("ADMIN")
+                .avatar("/images/logo.png")
+                .deleted(false)
+                .build();
+
+        // Usuario MODERADOR
+        Usuario moderador = Usuario.builder()
+                .nombre("María")
+                .apellidos("Moderadora")
+                .email("moderador@centrococotero.com")
+                .password(passwordEncoder.encode("mod123"))
+                .rol("MODERATOR")
+                .avatar("/images/logo.png")
+                .deleted(false)
+                .build();
+
+        // Usuario normal 1
+        Usuario user1 = Usuario.builder()
+                .nombre("Juan")
+                .apellidos("Pérez")
+                .email("juan@email.com")
+                .password(passwordEncoder.encode("user123"))
+                .rol("USER")
+                .avatar("/images/logo.png")
+                .deleted(false)
+                .build();
+
+        // Usuario normal 2
+        Usuario user2 = Usuario.builder()
+                .nombre("Ana")
+                .apellidos("García")
+                .email("ana@email.com")
+                .password(passwordEncoder.encode("user123"))
+                .rol("USER")
+                .avatar("/images/logo.png")
+                .deleted(false)
+                .build();
+
+        // Usuario normal 3
+        Usuario user3 = Usuario.builder()
+                .nombre("Carlos")
+                .apellidos("López")
+                .email("carlos@email.com")
+                .password(passwordEncoder.encode("user123"))
+                .rol("USER")
+                .avatar("/images/logo.png")
+                .deleted(false)
+                .build();
+
+        userRepository.saveAll(List.of(admin, moderador, user1, user2, user3));
+        
+        System.out.println("✅ Usuarios creados:");
+        System.out.println("   👑 Admin: admin@centrococotero.com / admin123");
+        System.out.println("   🛡️  Moderador: moderador@centrococotero.com / mod123");
+        System.out.println("   👤 Usuario 1: juan@email.com / user123");
+        System.out.println("   👤 Usuario 2: ana@email.com / user123");
+        System.out.println("   👤 Usuario 3: carlos@email.com / user123");
+
+        // ===== PRODUCTOS =====
         System.out.println("🧹 Borrando productos antiguos...");
         productoRepository.deleteAll();
 

@@ -80,7 +80,17 @@
               id="signin-form"
               class="auth-form needs-validation"
               novalidate
+              action="/auth/login-post"
+              method="post"
             >
+              {% if loginError %}
+              <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span>{{ loginError }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              {% endif %}
+              
               <div class="mb-4">
                 <label for="loginEmail" class="form-label fw-semibold"
                   >Correo Electrónico</label
@@ -93,6 +103,7 @@
                     type="email"
                     class="form-control auth-input border-start-0 ps-0"
                     id="loginEmail"
+                    name="username"
                     placeholder="tu@correo.com"
                     required
                   />
@@ -114,6 +125,7 @@
                     type="password"
                     class="form-control auth-input border-start-0 border-end-0 ps-0"
                     id="loginPassword"
+                    name="password"
                     placeholder="Tu contraseña"
                     required
                   />
@@ -148,6 +160,8 @@
                 >
               </div>
 
+              <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
+
               <button
                 type="submit"
                 class="btn btn-primary w-100 py-3 mb-3 fw-semibold btn-login"
@@ -161,11 +175,14 @@
               id="signup-form"
               class="auth-form needs-validation"
               style="display: none"
+              action="/auth/register"
+              method="post"
+              enctype="multipart/form-data"
               novalidate
             >
               <div class="mb-1">
                 <label for="signupName" class="form-label fw-semibold"
-                  >Nombre Completo</label
+                  >Nombre</label
                 >
                 <div class="input-group has-validation">
                   <span class="input-group-text border-end-0">
@@ -175,11 +192,34 @@
                     type="text"
                     class="form-control auth-input border-start-0 ps-0"
                     id="signupName"
-                    placeholder="Juan Pérez"
+                    name="nombre"
+                    placeholder="Juan"
                     required
                   />
                   <div class="invalid-feedback">
-                    Por favor, introduce tu nombre completo.
+                    Por favor, introduce tu nombre.
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-1">
+                <label for="signupApellidos" class="form-label fw-semibold"
+                  >Apellidos</label
+                >
+                <div class="input-group has-validation">
+                  <span class="input-group-text border-end-0">
+                    <i class="fas fa-user text-muted"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control auth-input border-start-0 ps-0"
+                    id="signupApellidos"
+                    name="apellidos"
+                    placeholder="Pérez García"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Por favor, introduce tus apellidos.
                   </div>
                 </div>
               </div>
@@ -196,6 +236,7 @@
                     type="email"
                     class="form-control auth-input border-start-0 ps-0"
                     id="signupEmail"
+                    name="email"
                     placeholder="tu@correo.com"
                     required
                   />
@@ -217,6 +258,7 @@
                     type="password"
                     class="form-control auth-input border-start-0 border-end-0 ps-0"
                     id="signupPassword"
+                    name="password"
                     placeholder="Mínimo 8 caracteres"
                     required
                     minlength="8"
@@ -233,7 +275,7 @@
                 </div>
               </div>
 
-              <div class="mb-4">
+              <div class="mb-1">
                 <label
                   for="signupConfirmPassword"
                   class="form-label fw-semibold"
@@ -263,6 +305,24 @@
               </div>
 
               <div class="mb-1">
+                <label for="signupAvatar" class="form-label fw-semibold"
+                  >Foto de Perfil (opcional)</label
+                >
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fas fa-image text-muted"></i>
+                  </span>
+                  <input
+                    type="file"
+                    class="form-control auth-input border-start-0 ps-0"
+                    id="signupAvatar"
+                    name="file"
+                    accept="image/*"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-1">
                 <div class="form-check">
                   <input
                     class="form-check-input"
@@ -286,6 +346,8 @@
                 </div>
               </div>
 
+              <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
+
               <button
                 type="submit"
                 class="btn btn-primary w-100 py-2 mb-2 fw-semibold btn-login"
@@ -293,6 +355,53 @@
                 <i class="fas fa-user-plus me-2"></i>Crear Cuenta
               </button>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Éxito en Registro -->
+    <div class="modal fade" id="registroExitosoModal" tabindex="-1" aria-labelledby="registroExitosoLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-body text-center p-5">
+            <div class="text-success mb-4">
+              <i class="fas fa-check-circle fa-5x"></i>
+            </div>
+            <h3 class="fw-bold text-success mb-3">¡Registro Exitoso!</h3>
+            <p class="text-muted fs-5 mb-4">
+              Tu cuenta ha sido creada correctamente.<br>
+              Ya puedes iniciar sesión con tus credenciales.
+            </p>
+            <button type="button" class="btn btn-success btn-lg px-5" data-bs-dismiss="modal" onclick="switchToLogin()">
+              <i class="fas fa-sign-in-alt me-2"></i>Ir a Iniciar Sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Email Existente -->
+    <div class="modal fade" id="emailExistenteModal" tabindex="-1" aria-labelledby="emailExistenteLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-body text-center p-5">
+            <div class="text-warning mb-4">
+              <i class="fas fa-exclamation-triangle fa-5x"></i>
+            </div>
+            <h3 class="fw-bold text-warning mb-3">Email Ya Registrado</h3>
+            <p class="text-muted fs-5 mb-4">
+              El correo electrónico que intentas usar ya está registrado en nuestro sistema.<br>
+              ¿Quieres iniciar sesión en su lugar?
+            </p>
+            <div class="d-flex gap-3 justify-content-center">
+              <button type="button" class="btn btn-success btn-lg px-4" data-bs-dismiss="modal" onclick="switchToLogin()">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal" onclick="switchToRegister()">
+                <i class="fas fa-arrow-left me-2"></i>Volver a Registro
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -312,6 +421,20 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Mostrar modal de registro exitoso si el parámetro está presente
+        {% if registroExitoso %}
+        const registroModal = new bootstrap.Modal(document.getElementById('registroExitosoModal'));
+        registroModal.show();
+        {% endif %}
+
+        // Mostrar modal de email existente si el parámetro está presente
+        {% if emailExistente %}
+        const emailModal = new bootstrap.Modal(document.getElementById('emailExistenteModal'));
+        emailModal.show();
+        // Cambiar automáticamente a la pestaña de registro
+        switchToRegister();
+        {% endif %}
+
         const forms = document.querySelectorAll(".needs-validation");
         forms.forEach((form) => {
           form.addEventListener("submit", function (event) {
@@ -365,6 +488,7 @@
         confirmPassword.addEventListener("input", validatePasswordMatch);
 
         // Manejo de envío de formularios
+        /*
         document
           .getElementById("signin-form")
           .addEventListener("submit", function (e) {
@@ -377,19 +501,10 @@
               // Aquí irían las llamadas a la API
             }
           });
+        */
 
-        document
-          .getElementById("signup-form")
-          .addEventListener("submit", function (e) {
-            e.preventDefault();
-            if (this.checkValidity()) {
-              showSuccessAlert(
-                "¡Cuenta creada exitosamente!",
-                "Bienvenido a Centro Cocotero"
-              );
-              // Aquí irían las llamadas a la API
-            }
-          });
+        // El formulario de registro se envía directamente al servidor
+        // No necesitamos interceptar el submit porque el backend lo maneja
       });
 
       function switchToLogin() {

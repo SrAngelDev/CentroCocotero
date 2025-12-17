@@ -1,9 +1,15 @@
 package srangeldev.centrococotero.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import srangeldev.centrococotero.models.Favorito;
 import srangeldev.centrococotero.models.Producto;
+import srangeldev.centrococotero.models.Usuario;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,6 +17,23 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalDataController {
+
+    @ModelAttribute("_csrf")
+    public CsrfToken csrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    }
+
+    @ModelAttribute("usuarioLogueado")
+    public Usuario getUsuarioLogueado() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            Object principal = auth.getPrincipal();
+            if (principal instanceof Usuario) {
+                return (Usuario) principal;
+            }
+        }
+        return null;
+    }
 
     @ModelAttribute("favoritos")
     public List<Favorito> cargarFavoritosMock() {
