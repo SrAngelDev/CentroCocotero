@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+{% include "fragments/head" %}
+
+<body class="d-flex flex-column min-vh-100">
+
+{% include "fragments/navbar" %}
+
+<div class="container py-4 mt-5 pt-3">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h2><i class="bi bi-person-circle"></i> Mi Perfil</h2>
+        </div>
+    </div>
+
+    {% if mensaje %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="border: 2px solid #422A21; border-radius: 12px;">
+                <i class="bi bi-check-circle"></i> {{ mensaje }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow" style="border: 2px solid #422A21; border-radius: 12px; overflow: hidden;">
+                <div class="card-header text-white" style="background-color: #16BABD; border-bottom: 2px solid #422A21;">
+                    <h5 class="mb-0"><i class="bi bi-person-fill"></i> Datos Personales</h5>
+                </div>
+                <div class="card-body bg-suave">
+                    <div class="text-center mb-4">
+                        <img src="{% if usuario.avatar is empty %}https://api.dicebear.com/7.x/avataaars/svg?seed={{ usuario.email }}.png{% else %}{{ usuario.avatar }}{% endif %}"
+                             alt="Avatar"
+                             class="rounded-circle border border-3"
+                             width="120" height="120"
+                             style="object-fit: cover; border-color: #FF9F1C !important;">
+
+                        <h4 class="mt-3 fw-bold" style="font-family: 'Fredoka', sans-serif;">{{ usuario.nombre }} {{ usuario.apellidos }}</h4>
+
+                        <span class="badge rounded-pill border border-dark bg-{% if usuario.rol == 'ADMIN' %}danger{% elseif usuario.rol == 'MODERATOR' %}warning{% else %}secondary{% endif %}">
+                            {{ usuario.rol }}
+                        </span>
+                    </div>
+
+                    <form method="post" action="/app/perfil/editar" enctype="multipart/form-data">
+                        <input type="hidden" name="{{ csrfParamName }}" value="{{ csrfToken }}"/>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" value="{{ usuario.nombre }}" required style="border: 2px solid #422A21;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" value="{{ usuario.apellidos }}" required style="border: 2px solid #422A21;">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" value="{{ usuario.email }}" disabled style="border: 2px solid #422A21; background-color: #e9ecef;">
+                            <small class="text-muted">El email no se puede modificar</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Cambiar Avatar</label>
+                            <input type="file" class="form-control" name="file" accept="image/*" style="border: 2px solid #422A21;">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Fecha de Alta</label>
+                            <input type="text" class="form-control"
+                                   value="{{ usuario.fechaAlta | formatDateTime }}" disabled style="border: 2px solid #422A21; background-color: #e9ecef;">
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-save me-2"></i> Actualizar Perfil
+                            </button>
+                            <a href="/public" class="btn btn-secondary px-4" style="border: 2px solid #422A21; border-radius: 12px;">
+                                <i class="bi bi-arrow-left me-2"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow" style="border: 2px solid #422A21; border-radius: 12px; overflow: hidden;">
+                <div class="card-header text-white" style="background-color: #FF9F1C; border-bottom: 2px solid #422A21;">
+                    <h5 class="mb-0 text-dark"><i class="bi bi-shop"></i> Tu perfil como vendedor</h5>
+                </div>
+                <div class="card-body text-center bg-suave">
+                    <div class="mb-3">
+                        <img src="{% if usuario.avatar is empty %}https://api.dicebear.com/7.x/avataaars/svg?seed={{ usuario.email }}.png{% else %}{{ usuario.avatar }}{% endif %}"
+                             alt="Avatar vendedor"
+                             class="rounded-circle border border-2"
+                             width="80" height="80"
+                             style="object-fit: cover; border-color: #422A21 !important;">
+                    </div>
+
+                    <h5 class="fw-bold mb-1" style="color: #FF9F1C; font-family: 'Fredoka';">{{ usuario.nombre }} {{ usuario.apellidos }}</h5>
+                    <p class="text-muted mb-4">
+                        Miembro desde {{ usuario.fechaAlta | formatMonth }} {{ currentYear }}
+                    </p>
+
+                    <div class="mb-4">
+                        <h6 class="mb-2 fw-bold">Valoración del vendedor:</h6>
+                        <div class="mb-2">
+                            <span class="text-warning fs-5" style="text-shadow: 1px 1px 0 #422A21;">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </span>
+                            <strong class="ms-2 fs-4" style="color: #16BABD;">4.7</strong>
+                        </div>
+                        <small class="text-muted">(89 opiniones)</small>
+                    </div>
+
+                    <div class="row text-center border-top border-dark pt-3">
+                        <div class="col-6 border-end border-dark">
+                            <strong class="d-block fs-3" style="color: #488B49; font-family: 'Fredoka';">45</strong>
+                            <small class="text-muted fw-bold">Productos</small>
+                        </div>
+                        <div class="col-6">
+                            <strong class="d-block fs-3" style="color: #16BABD; font-family: 'Fredoka';">32</strong>
+                            <small class="text-muted fw-bold">Ventas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "fragments/footer" %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
