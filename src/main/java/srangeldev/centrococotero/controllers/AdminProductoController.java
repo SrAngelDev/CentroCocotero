@@ -48,7 +48,7 @@ public class AdminProductoController {
         return "redirect:/admin/productos";
     }
 
-    @GetMapping("/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable String id) {
         service.deleteById(id);
         return "redirect:/admin/productos";

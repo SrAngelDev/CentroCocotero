@@ -1,0 +1,247 @@
+{% include 'fragments/header' %}
+
+<style>
+    .admin-container {
+        background-color: #fffdf5;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+    
+    .admin-card {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 15px;
+        box-shadow: 6px 6px 0px #422A21;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 8px 8px 0px #422A21;
+    }
+    
+    .table-admin {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .table-admin thead {
+        background-color: #16BABD;
+        color: #422A21;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 700;
+    }
+    
+    .table-admin tbody tr:hover {
+        background-color: #F4E4BA;
+    }
+    
+    .btn-nuevo {
+        background: #488B49;
+        border: 3px solid #422A21;
+        border-radius: 12px;
+        padding: 0.8rem 1.5rem;
+        color: white;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 4px 4px 0px #422A21;
+    }
+    
+    .btn-nuevo:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 0px #422A21;
+        color: white;
+    }
+    
+    .btn-editar {
+        background: #16BABD;
+        border: 2px solid #422A21;
+        border-radius: 8px;
+        padding: 0.4rem 0.8rem;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-editar:hover {
+        background: #12a0a2;
+        color: white;
+    }
+    
+    .btn-eliminar {
+        background: #FF9F1C;
+        border: 2px solid #422A21;
+        border-radius: 8px;
+        padding: 0.4rem 0.8rem;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-eliminar:hover {
+        background: #e68d0f;
+        color: white;
+    }
+    
+    .producto-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #422A21;
+    }
+    
+    .badge-stock {
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-2" style="font-family: 'Luckiest Guy', cursive; color: #16BABD;">
+                <i class="fas fa-box me-3"></i>Gestión de Productos
+            </h1>
+            <p class="lead" style="color: #422A21;">Administra el catálogo de Centro Cocotero</p>
+        </div>
+
+        <!-- Botón Nuevo Producto -->
+        <div class="mb-4 text-end">
+            <a href="/admin/productos/nuevo" class="btn-nuevo">
+                <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
+            </a>
+        </div>
+
+        <!-- Tabla de Productos -->
+        <div class="table-admin">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if productos is not empty %}
+                        {% for producto in productos %}
+                        <tr>
+                            <td>
+                                {% if producto.imagenes is not empty %}
+                                    <img src="{{ producto.imagenes[0] }}" alt="{{ producto.nombre }}" class="producto-img">
+                                {% else %}
+                                    <img src="/images/placeholder.jpg" alt="Sin imagen" class="producto-img">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong>{{ producto.nombre }}</strong>
+                                {% if producto.descripcion %}
+                                    <br><small class="text-muted">
+                                        {% if producto.descripcion | length > 50 %}
+                                            {{ producto.descripcion | slice(0, 50) }}...
+                                        {% else %}
+                                            {{ producto.descripcion }}
+                                        {% endif %}
+                                    </small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if producto.categoria is not null %}
+                                    <span class="badge" style="background-color: #F4E4BA; color: #422A21; border: 2px solid #422A21; padding: 0.4rem 0.8rem;">
+                                        {{ producto.categoria.descripcion }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge" style="background-color: #dee2e6; color: #6c757d; padding: 0.4rem 0.8rem;">
+                                        Sin categoría
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if producto.precio is not null %}
+                                    <strong style="color: #488B49;">{{ producto.precio | formatPrice }}</strong>
+                                {% else %}
+                                    <span class="text-muted">Sin precio</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if producto.stock is not null %}
+                                        {% if producto.stock > 10 %}
+                                        <span class="badge-stock" style="background-color: #488B49; color: white;">
+                                            {{ producto.stock }} unidades
+                                        </span>
+                                    {% elseif producto.stock > 0 %}
+                                        <span class="badge-stock" style="background-color: #FF9F1C; color: white;">
+                                            {{ producto.stock }} unidades
+                                        </span>
+                                    {% else %}
+                                        <span class="badge-stock" style="background-color: #dc3545; color: white;">
+                                            Agotado
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">Sin stock</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="/admin/productos/editar/{{ producto.id }}" class="btn btn-sm btn-editar me-2">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <button onclick="eliminarProducto({{ producto.id }})" class="btn btn-sm btn-eliminar">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-box-open fa-4x mb-3" style="color: #ccc;"></i>
+                                <p class="text-muted mb-3" style="font-size: 1.2rem;">No hay productos en el catálogo</p>
+                                <a href="/admin/productos/nuevo" class="btn-nuevo">
+                                    <i class="fas fa-plus-circle me-2"></i>Crear Primer Producto
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function eliminarProducto(id) {
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+        fetch('/admin/productos/eliminar/' + id, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ _csrf.token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error al eliminar el producto');
+            }
+        })
+        .catch(error => {
+            alert('Error al eliminar el producto: ' + error);
+        });
+    }
+}
+</script>
+
+{% include 'fragments/footer' %}

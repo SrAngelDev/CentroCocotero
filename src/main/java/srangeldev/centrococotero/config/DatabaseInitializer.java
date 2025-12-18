@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import srangeldev.centrococotero.models.Producto;
-import srangeldev.centrococotero.models.TipoCategoria;
-import srangeldev.centrococotero.models.TipoRol;
-import srangeldev.centrococotero.models.Usuario;
+import srangeldev.centrococotero.models.*;
 import srangeldev.centrococotero.repositories.*;
 
 import java.math.BigDecimal;
@@ -304,5 +301,127 @@ public class DatabaseInitializer implements CommandLineRunner {
         ));
 
         System.out.println("✅ ¡CARGA COMPLETADA! 20 Productos disponibles.");
+
+        // ===== PEDIDOS DE EJEMPLO =====
+        System.out.println("📦 Creando pedidos de ejemplo para pruebas de admin...");
+        
+        List<Producto> productos = productoRepository.findAll();
+        
+        // Pedido 1 - Usuario juan (PENDIENTE)
+        Pedido pedido1 = Pedido.builder()
+                .id("DEMO-001")
+                .usuario(user1)
+                .estado(EstadoPedido.PENDIENTE)
+                .total(new BigDecimal("23.49"))
+                .direccionEnvio("Calle Mayor 15, 3ºB - Madrid, 28013 - España")
+                .notas("Por favor, entregar por la mañana")
+                .createdAt(java.time.LocalDateTime.now().minusDays(2))
+                .build();
+        
+        pedidoRepository.save(pedido1);
+        
+        // Líneas del pedido 1
+        LineaPedido linea1_1 = LineaPedido.builder()
+                .id("LIN-001-1")
+                .pedido(pedido1)
+                .producto(productos.get(0)) // Coco Fresco Premium
+                .precioUnitario(new BigDecimal("4.50"))
+                .cantidad(2)
+                .subtotal(new BigDecimal("9.00"))
+                .build();
+        
+        LineaPedido linea1_2 = LineaPedido.builder()
+                .id("LIN-001-2")
+                .pedido(pedido1)
+                .producto(productos.get(4)) // Aceite de Coco Virgen Extra
+                .precioUnitario(new BigDecimal("12.99"))
+                .cantidad(1)
+                .subtotal(new BigDecimal("12.99"))
+                .build();
+        
+        LineaPedido linea1_3 = LineaPedido.builder()
+                .id("LIN-001-3")
+                .pedido(pedido1)
+                .producto(productos.get(12)) // Jabón Artesanal de Coco
+                .precioUnitario(new BigDecimal("6.20"))
+                .cantidad(1)
+                .subtotal(new BigDecimal("6.20"))
+                .build();
+        
+        pedido1.getLineas().addAll(List.of(linea1_1, linea1_2, linea1_3));
+        pedidoRepository.save(pedido1);
+        
+        // Pedido 2 - Usuario ana (PAGADO)
+        Pedido pedido2 = Pedido.builder()
+                .id("DEMO-002")
+                .usuario(user2)
+                .estado(EstadoPedido.PAGADO)
+                .total(new BigDecimal("45.90"))
+                .direccionEnvio("Av. Diagonal 123, Ático - Barcelona, 08029 - España")
+                .notas("Llamar al timbre 2 veces")
+                .createdAt(java.time.LocalDateTime.now().minusDays(5))
+                .build();
+        
+        pedidoRepository.save(pedido2);
+        
+        LineaPedido linea2_1 = LineaPedido.builder()
+                .id("LIN-002-1")
+                .pedido(pedido2)
+                .producto(productos.get(3)) // Licor de Coco Suave
+                .precioUnitario(new BigDecimal("14.50"))
+                .cantidad(2)
+                .subtotal(new BigDecimal("29.00"))
+                .build();
+        
+        LineaPedido linea2_2 = LineaPedido.builder()
+                .id("LIN-002-2")
+                .pedido(pedido2)
+                .producto(productos.get(16)) // Camisa Hawaiana 'Sunset'
+                .precioUnitario(new BigDecimal("25.00"))
+                .cantidad(1)
+                .subtotal(new BigDecimal("25.00"))
+                .build();
+        
+        pedido2.getLineas().addAll(List.of(linea2_1, linea2_2));
+        pedidoRepository.save(pedido2);
+        
+        // Pedido 3 - Usuario carlos (ENVIADO)
+        Pedido pedido3 = Pedido.builder()
+                .id("DEMO-003")
+                .usuario(user3)
+                .estado(EstadoPedido.ENVIADO)
+                .total(new BigDecimal("15.80"))
+                .direccionEnvio("Plaza España 7, 1º - Valencia, 46001 - España")
+                .notas(null)
+                .createdAt(java.time.LocalDateTime.now().minusDays(8))
+                .build();
+        
+        pedidoRepository.save(pedido3);
+        
+        LineaPedido linea3_1 = LineaPedido.builder()
+                .id("LIN-003-1")
+                .pedido(pedido3)
+                .producto(productos.get(7)) // Chips de Coco Tostados
+                .precioUnitario(new BigDecimal("2.50"))
+                .cantidad(3)
+                .subtotal(new BigDecimal("7.50"))
+                .build();
+        
+        LineaPedido linea3_2 = LineaPedido.builder()
+                .id("LIN-003-2")
+                .pedido(pedido3)
+                .producto(productos.get(8)) // Pack Piña Gold
+                .precioUnitario(new BigDecimal("8.75"))
+                .cantidad(1)
+                .subtotal(new BigDecimal("8.75"))
+                .build();
+        
+        pedido3.getLineas().addAll(List.of(linea3_1, linea3_2));
+        pedidoRepository.save(pedido3);
+        
+        System.out.println("✅ Pedidos de ejemplo creados:");
+        System.out.println("   📦 DEMO-001 (PENDIENTE) - Juan - 23.49€");
+        System.out.println("   📦 DEMO-002 (PAGADO) - Ana - 45.90€");
+        System.out.println("   📦 DEMO-003 (ENVIADO) - Carlos - 15.80€");
     }
 }

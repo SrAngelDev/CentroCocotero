@@ -218,4 +218,172 @@ public class EmailService {
 
         log.info("Email simple enviado exitosamente");
     }
+
+    /**
+     * Envía un email de notificación de cambio de estado del pedido
+     * 
+     * @param pedido Pedido actualizado
+     * @throws MessagingException Si hay error al enviar el email
+     */
+    public void enviarNotificacionCambioEstado(Pedido pedido) throws MessagingException, UnsupportedEncodingException {
+        log.info("Enviando notificación de cambio de estado para pedido: {} - Nuevo estado: {}", 
+                 pedido.getId(), pedido.getEstado());
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+
+        helper.setTo(pedido.getUsuario().getEmail());
+        helper.setFrom(fromEmail, fromName);
+        helper.setSubject("Actualización de tu pedido #" + pedido.getId());
+
+        String htmlContent = construirEmailCambioEstado(pedido);
+        helper.setText(htmlContent, true);
+
+        mailSender.send(message);
+
+        log.info("Email de cambio de estado enviado exitosamente a: {}", pedido.getUsuario().getEmail());
+    }
+
+    /**
+     * Construye el contenido HTML del email de cambio de estado
+     * 
+     * @param pedido Pedido con estado actualizado
+     * @return HTML del email
+     */
+    private String construirEmailCambioEstado(Pedido pedido) {
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>");
+        html.append("<html>");
+        html.append("<head>");
+        html.append("<meta charset='UTF-8'>");
+        html.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
+        html.append("<link href='https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@400;600;700&display=swap' rel='stylesheet'>");
+        html.append("<style>");
+        html.append("* { box-sizing: border-box; margin: 0; padding: 0; }");
+        html.append("body { font-family: 'Nunito', sans-serif; line-height: 1.6; color: #422A21; background-color: #F4E4BA; padding: 20px; }");
+        html.append(".container { max-width: 650px; margin: 0 auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }");
+        html.append(".header { background: linear-gradient(135deg, #FF9F1C 0%, #FF7F1C 100%); color: white; padding: 40px 30px; text-align: center; position: relative; }");
+        html.append(".header::before { content: '🔔'; font-size: 60px; display: block; margin-bottom: 15px; }");
+        html.append(".header h1 { font-family: 'Luckiest Guy', cursive; font-size: 2.2em; margin: 0 0 10px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); letter-spacing: 1px; }");
+        html.append(".header p { font-size: 1.1em; margin: 0; opacity: 0.95; }");
+        html.append(".content { padding: 40px 30px; background: #FFFDF5; }");
+        html.append(".greeting { font-size: 1.2em; margin-bottom: 20px; color: #422A21; }");
+        html.append(".greeting strong { color: #FF9F1C; font-weight: 700; }");
+        html.append(".intro { color: #666; margin-bottom: 25px; line-height: 1.8; }");
+        html.append(".estado-box { background: white; border: 3px solid #FF9F1C; border-radius: 12px; padding: 25px; margin: 25px 0; box-shadow: 0 4px 15px rgba(255, 159, 28, 0.1); text-align: center; }");
+        html.append(".estado-icon { font-size: 80px; margin-bottom: 20px; }");
+        html.append(".estado-label { font-size: 0.9em; color: #666; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }");
+        html.append(".estado-valor { font-family: 'Luckiest Guy', cursive; font-size: 2.2em; color: #FF9F1C; letter-spacing: 1px; }");
+        html.append(".pedido-info { background: #F4E4BA; border-radius: 10px; padding: 20px; margin: 20px 0; }");
+        html.append(".info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 2px dashed rgba(66, 42, 33, 0.2); }");
+        html.append(".info-row:last-child { border-bottom: none; }");
+        html.append(".info-row strong { color: #422A21; font-weight: 700; }");
+        html.append(".info-row .value { color: #16BABD; font-weight: 600; }");
+        html.append(".message-box { background: linear-gradient(135deg, #16BABD 0%, #488B49 100%); color: white; padding: 25px; border-radius: 10px; margin: 25px 0; text-align: center; }");
+        html.append(".message-box p { font-size: 1.05em; line-height: 1.7; margin: 0; }");
+        html.append(".footer { background: #422A21; color: white; padding: 30px; text-align: center; }");
+        html.append(".footer-emoji { font-size: 40px; margin-bottom: 15px; }");
+        html.append(".footer p { margin: 8px 0; opacity: 0.9; }");
+        html.append(".footer .brand { font-family: 'Luckiest Guy', cursive; color: #16BABD; font-size: 1.3em; margin-bottom: 5px; }");
+        html.append("</style>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("<div class='container'>");
+        
+        html.append("<div class='header'>");
+        html.append("<h1>ACTUALIZACIÓN DE PEDIDO</h1>");
+        html.append("<p>Tu pedido ha cambiado de estado</p>");
+        html.append("</div>");
+        
+        html.append("<div class='content'>");
+        html.append("<p class='greeting'>¡Hola <strong>").append(pedido.getUsuario().getNombre()).append("</strong>! 👋</p>");
+        html.append("<p class='intro'>Queremos informarte que el estado de tu pedido ha sido actualizado. A continuación te mostramos los detalles:</p>");
+        
+        html.append("<div class='estado-box'>");
+        html.append("<div class='estado-icon'>");
+        
+        // Icono según el estado
+        switch (pedido.getEstado()) {
+            case PENDIENTE:
+                html.append("⏳");
+                break;
+            case PAGADO:
+                html.append("✅");
+                break;
+            case CONFIRMADO:
+                html.append("🎉");
+                break;
+            case ENVIADO:
+                html.append("🚚");
+                break;
+            case ENTREGADO:
+                html.append("📦");
+                break;
+            case CANCELADO:
+                html.append("❌");
+                break;
+        }
+        
+        html.append("</div>");
+        html.append("<div class='estado-label'>Nuevo Estado</div>");
+        html.append("<div class='estado-valor'>").append(pedido.getEstado().name()).append("</div>");
+        html.append("</div>");
+        
+        html.append("<div class='pedido-info'>");
+        html.append("<div class='info-row'>");
+        html.append("<strong>📦 Número de Pedido:</strong>");
+        html.append("<span class='value'>#").append(pedido.getId()).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='info-row'>");
+        html.append("<strong>📅 Fecha del Pedido:</strong>");
+        html.append("<span class='value'>").append(pedido.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='info-row'>");
+        html.append("<strong>💰 Total:</strong>");
+        html.append("<span class='value'>").append(String.format("%.2f", pedido.getTotal())).append(" €</span>");
+        html.append("</div>");
+        html.append("</div>");
+        
+        // Mensaje personalizado según el estado
+        html.append("<div class='message-box'>");
+        switch (pedido.getEstado()) {
+            case PENDIENTE:
+                html.append("<p>Tu pedido está pendiente de confirmación. Te notificaremos cuando se procese.</p>");
+                break;
+            case PAGADO:
+                html.append("<p>¡Pago recibido! Tu pedido será procesado pronto.</p>");
+                break;
+            case CONFIRMADO:
+                html.append("<p>¡Excelente! Tu pedido ha sido confirmado y está siendo preparado.</p>");
+                break;
+            case ENVIADO:
+                html.append("<p>🎊 ¡Tu pedido está en camino! Recibirás tus productos muy pronto.</p>");
+                break;
+            case ENTREGADO:
+                html.append("<p>🎉 ¡Tu pedido ha sido entregado! Esperamos que disfrutes tus productos. ¡Gracias por tu compra!</p>");
+                break;
+            case CANCELADO:
+                html.append("<p>Tu pedido ha sido cancelado. Si tienes dudas, contáctanos.</p>");
+                break;
+        }
+        html.append("</div>");
+        
+        html.append("<p style='text-align: center; color: #666; margin-top: 25px;'>Gracias por confiar en Centro Cocotero 🥥</p>");
+        html.append("</div>");
+        
+        html.append("<div class='footer'>");
+        html.append("<div class='footer-emoji'>🥥🌴</div>");
+        html.append("<p class='brand'>CENTRO COCOTERO</p>");
+        html.append("<p>Productos naturales de la mejor calidad</p>");
+        html.append("<p style='font-size: 0.85em; margin-top: 15px; opacity: 0.7;'>Este es un correo automático, por favor no respondas a este mensaje.</p>");
+        html.append("</div>");
+        
+        html.append("</div>");
+        html.append("</body>");
+        html.append("</html>");
+        
+        return html.toString();
+    }
 }

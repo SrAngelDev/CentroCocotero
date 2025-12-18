@@ -1,0 +1,256 @@
+{% include 'fragments/header' %}
+
+<style>
+    .admin-container {
+        background-color: #fffdf5;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+    
+    .admin-card {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 15px;
+        box-shadow: 6px 6px 0px #422A21;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .form-label {
+        font-weight: 700;
+        color: #422A21;
+        margin-bottom: 0.5rem;
+        font-family: 'Fredoka', sans-serif;
+    }
+    
+    .form-control, .form-select {
+        border: 3px solid #422A21;
+        border-radius: 10px;
+        padding: 0.8rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #16BABD;
+        box-shadow: 0 0 0 0.2rem rgba(22, 186, 189, 0.25);
+        outline: none;
+    }
+    
+    .btn-guardar {
+        background: #488B49;
+        border: 3px solid #422A21;
+        border-radius: 12px;
+        padding: 0.8rem 2rem;
+        color: white;
+        font-weight: 700;
+        font-family: 'Fredoka', sans-serif;
+        transition: all 0.3s ease;
+        box-shadow: 4px 4px 0px #422A21;
+    }
+    
+    .btn-guardar:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 0px #422A21;
+        background: #3a7a3b;
+        color: white;
+    }
+    
+    .btn-cancelar {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 12px;
+        padding: 0.8rem 2rem;
+        color: #422A21;
+        font-weight: 700;
+        font-family: 'Fredoka', sans-serif;
+        transition: all 0.3s ease;
+        box-shadow: 4px 4px 0px #422A21;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-cancelar:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 0px #422A21;
+        background: #F4E4BA;
+        color: #422A21;
+    }
+    
+    .form-help {
+        font-size: 0.875rem;
+        color: #666;
+        margin-top: 0.25rem;
+    }
+    
+    .required-mark {
+        color: #FF9F1C;
+        font-weight: 700;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-2" style="font-family: 'Luckiest Guy', cursive; color: #16BABD;">
+                <i class="fas fa-edit me-3"></i>
+                {% if producto.id %}
+                    Editar Producto
+                {% else %}
+                    Nuevo Producto
+                {% endif %}
+            </h1>
+            <p class="lead" style="color: #422A21;">Completa la información del producto</p>
+        </div>
+
+        <!-- Formulario -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="admin-card">
+                    <form action="/admin/productos/guardar" method="POST">
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
+                        
+                        <!-- ID del producto (si existe) -->
+                        {% if producto.id %}
+                            <input type="hidden" name="id" value="{{ producto.id }}">
+                        {% endif %}
+
+                        <!-- Nombre -->
+                        <div class="mb-4">
+                            <label for="nombre" class="form-label">
+                                <i class="fas fa-tag me-2" style="color: #16BABD;"></i>
+                                Nombre del Producto <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="nombre" 
+                                name="nombre" 
+                                value="{{ producto.nombre }}" 
+                                required 
+                                placeholder="Ej: Aceite de Coco Orgánico"
+                            >
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-4">
+                            <label for="descripcion" class="form-label">
+                                <i class="fas fa-align-left me-2" style="color: #16BABD;"></i>
+                                Descripción
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="descripcion" 
+                                name="descripcion" 
+                                rows="4" 
+                                placeholder="Describe el producto, sus características y beneficios..."
+                            >{{ producto.descripcion }}</textarea>
+                            <div class="form-help">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Una buena descripción ayuda a los clientes a conocer mejor el producto
+                            </div>
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="mb-4">
+                            <label for="precio" class="form-label">
+                                <i class="fas fa-dollar-sign me-2" style="color: #488B49;"></i>
+                                Precio <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="precio" 
+                                name="precio" 
+                                value="{{ producto.precio }}" 
+                                step="0.01" 
+                                min="0" 
+                                required 
+                                placeholder="0.00"
+                            >
+                            <div class="form-help">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Ingresa el precio en formato decimal (Ej: 15.99)
+                            </div>
+                        </div>
+
+                        <!-- Categoría -->
+                        <div class="mb-4">
+                            <label for="categoria" class="form-label">
+                                <i class="fas fa-list me-2" style="color: #FF9F1C;"></i>
+                                Categoría <span class="required-mark">*</span>
+                            </label>
+                            <select class="form-select" id="categoria" name="categoria" required>
+                                <option value="">Selecciona una categoría...</option>
+                                {% for categoria in categorias %}
+                                    <option 
+                                        value="{{ categoria }}" 
+                                        {% if producto.categoria is not null and producto.categoria == categoria %}selected{% endif %}
+                                    >
+                                        {{ categoria.descripcion }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="mb-4">
+                            <label for="stock" class="form-label">
+                                <i class="fas fa-boxes me-2" style="color: #422A21;"></i>
+                                Stock <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="stock" 
+                                name="stock" 
+                                value="{{ producto.stock }}" 
+                                min="0" 
+                                required 
+                                placeholder="0"
+                            >
+                            <div class="form-help">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Cantidad de unidades disponibles en inventario
+                            </div>
+                        </div>
+
+                        <!-- Imágenes -->
+                        <div class="mb-4">
+                            <label for="imagenes" class="form-label">
+                                <i class="fas fa-images me-2" style="color: #16BABD;"></i>
+                                URLs de Imágenes
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="imagenes" 
+                                name="imagenes" 
+                                value="{% if producto.imagenes is not empty %}{{ producto.imagenes | join(',') }}{% endif %}" 
+                                placeholder="https://ejemplo.com/imagen1.jpg, https://ejemplo.com/imagen2.jpg"
+                            >
+                            <div class="form-help">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Separa múltiples URLs con comas. Primera imagen será la principal.
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="text-center mt-5 pt-4" style="border-top: 2px dashed #422A21;">
+                            <button type="submit" class="btn btn-guardar me-3">
+                                <i class="fas fa-save me-2"></i>Guardar Producto
+                            </button>
+                            <a href="/admin/productos" class="btn-cancelar">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'fragments/footer' %}

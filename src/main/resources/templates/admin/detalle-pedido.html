@@ -1,0 +1,335 @@
+{% include 'fragments/header' %}
+
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+        background: linear-gradient(135deg, #F4E4BA 0%, #fff 100%);
+        min-height: 100vh;
+    }
+    
+    .admin-header {
+        background: linear-gradient(135deg, #16BABD 0%, #488B49 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .admin-header h1 {
+        font-family: 'Luckiest Guy', cursive;
+        font-size: 2.5rem;
+        margin: 0;
+    }
+    
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 0;
+        border-bottom: 1px dashed #dee2e6;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #422A21;
+    }
+    
+    .badge-pendiente {
+        background-color: #FF9F1C;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+    
+    .badge-confirmado {
+        background-color: #16BABD;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+    
+    .badge-enviado {
+        background-color: #488B49;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+    
+    .badge-entregado {
+        background-color: #28a745;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+    
+    .badge-cancelado {
+        background-color: #dc3545;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+    
+    .btn-tropical {
+        background: linear-gradient(135deg, #FF9F1C 0%, #F4A732 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        transition: all 0.3s;
+    }
+    
+    .btn-tropical:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 159, 28, 0.4);
+        color: white;
+    }
+    
+    .producto-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #422A21;
+    }
+    
+    .table thead {
+        background: linear-gradient(135deg, #422A21 0%, #5a3d32 100%);
+        color: white;
+    }
+    
+    .table thead th {
+        border: none;
+        padding: 1rem;
+        font-weight: 700;
+    }
+    
+    .edit-section {
+        background: #fffef8;
+        border: 2px solid #FF9F1C;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #422A21;
+    }
+</style>
+
+<div class="admin-header">
+    <div class="container">
+        <h1>📋 Detalle del Pedido</h1>
+        <p class="mb-0">Revisa y gestiona la información del pedido</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    {% if mensajeExito %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> {{ mensajeExito }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+
+    {% if mensajeAdvertencia %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ mensajeAdvertencia }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+
+    {% if mensajeError %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-x-circle-fill"></i> {{ mensajeError }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+
+    {% if pedido is not null %}
+        <!-- Información del Pedido -->
+        <div class="admin-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 style="color: #16BABD;">
+                    <i class="bi bi-box-seam"></i> Pedido #{{ pedido.id }}
+                </h3>
+                <a href="/admin/pedidos" class="btn btn-tropical">
+                    <i class="bi bi-arrow-left"></i> Volver a Pedidos
+                </a>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-row">
+                        <span class="info-label">ID del Pedido:</span>
+                        <span>{{ pedido.id }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Fecha y Hora:</span>
+                        <span>{% if pedido.createdAt is not null %}{{ pedido.createdAt }}{% else %}N/A{% endif %}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Cliente:</span>
+                        <span>{{ pedido.usuario.nombre }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span>{{ pedido.usuario.email }}</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-row">
+                        <span class="info-label">Total:</span>
+                        <span><strong style="color: #488B49; font-size: 1.2rem;">{{ pedido.total }}€</strong></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Estado Actual:</span>
+                        <span>
+                            {% if pedido.estado.name() == "PENDIENTE" %}
+                                <span class="badge badge-pendiente">
+                                    <i class="bi bi-clock-fill"></i> PENDIENTE
+                                </span>
+                            {% elseif pedido.estado.name() == "PAGADO" %}
+                                <span class="badge badge-confirmado">
+                                    <i class="bi bi-credit-card-fill"></i> PAGADO
+                                </span>
+                            {% elseif pedido.estado.name() == "CONFIRMADO" %}
+                                <span class="badge badge-confirmado">
+                                    <i class="bi bi-check-circle-fill"></i> CONFIRMADO
+                                </span>
+                            {% elseif pedido.estado.name() == "ENVIADO" %}
+                                <span class="badge badge-enviado">
+                                    <i class="bi bi-truck"></i> ENVIADO
+                                </span>
+                            {% elseif pedido.estado.name() == "ENTREGADO" %}
+                                <span class="badge badge-entregado">
+                                    <i class="bi bi-check-all"></i> ENTREGADO
+                                </span>
+                            {% elseif pedido.estado.name() == "CANCELADO" %}
+                                <span class="badge badge-cancelado">
+                                    <i class="bi bi-x-circle-fill"></i> CANCELADO
+                                </span>
+                            {% else %}
+                                <span class="badge" style="background-color: #6c757d;">
+                                    <i class="bi bi-question-circle"></i> {{ pedido.estado.name() }}
+                                </span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if pedido.pago is not null and pedido.pago.transaccionExternaId is not null %}
+                    <div class="info-row">
+                        <span class="info-label">ID de Pago (Stripe):</span>
+                        <span><small>{{ pedido.pago.transaccionExternaId }}</small></span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Editar Estado del Pedido -->
+        <div class="admin-card">
+            <h4 style="color: #FF9F1C; margin-bottom: 1.5rem;">
+                <i class="bi bi-pencil-square"></i> Cambiar Estado del Pedido
+            </h4>
+            <form method="post" action="/admin/pedidos/cambiar-estado/{{ pedido.id }}">
+                <input type="hidden" name="_csrf" value="{{ _csrf.token }}">
+                <input type="hidden" name="fromDetail" value="true">
+                <div class="row align-items-end">
+                    <div class="col-md-6">
+                        <label for="nuevoEstado" class="form-label">
+                            <i class="bi bi-gear"></i> Selecciona el nuevo estado
+                        </label>
+                        <select name="nuevoEstado" id="nuevoEstado" class="form-select" required>
+                            {% for estado in estados %}
+                                <option value="{{ estado }}" {% if estado == pedido.estado %}selected{% endif %}>
+                                    {{ estado.name() }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-tropical w-100">
+                            <i class="bi bi-save"></i> Actualizar Estado
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Productos del Pedido -->
+        <div class="admin-card">
+            <h4 style="color: #16BABD; margin-bottom: 1.5rem;">
+                <i class="bi bi-bag-fill"></i> Productos en el Pedido
+            </h4>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Producto</th>
+                            <th>Precio Unitario</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for linea in pedido.lineas %}
+                        <tr>
+                            <td>
+                                {% if linea.producto.imagenes is not empty %}
+                                    <img src="{{ linea.producto.imagenes[0] }}" alt="{{ linea.producto.nombre }}" class="producto-img">
+                                {% else %}
+                                    <img src="/images/placeholder.jpg" alt="Sin imagen" class="producto-img">
+                                {% endif %}
+                            </td>
+                            <td><strong>{{ linea.producto.nombre }}</strong></td>
+                            <td>{{ linea.precioUnitario }}€</td>
+                            <td>{{ linea.cantidad }}</td>
+                            <td><strong style="color: #488B49;">{{ linea.subtotal }}€</strong></td>
+                        </tr>
+                        {% endfor %}
+                        <tr style="background-color: #F4E4BA; font-size: 1.1rem;">
+                            <td colspan="4" class="text-end"><strong>TOTAL:</strong></td>
+                            <td><strong style="color: #422A21; font-size: 1.3rem;">{{ pedido.total }}€</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dirección de Envío -->
+        <div class="admin-card">
+            <h4 style="color: #488B49; margin-bottom: 1.5rem;">
+                <i class="bi bi-geo-alt-fill"></i> Dirección de Envío
+            </h4>
+            <div class="info-row">
+                <span class="info-label">Dirección:</span>
+                <span>{% if pedido.direccionEnvio is not null %}{{ pedido.direccionEnvio }}{% else %}No especificada{% endif %}</span>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="admin-card">
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i> No se encontró el pedido solicitado.
+            </div>
+            <a href="/admin/pedidos" class="btn btn-tropical">
+                <i class="bi bi-arrow-left"></i> Volver a Pedidos
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% include 'fragments/footer' %}

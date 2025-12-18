@@ -56,15 +56,23 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ linea.producto.imagen }}" 
-                                                 alt="{{ linea.producto.nombre }}"
-                                                 width="50" height="50"
-                                                 class="rounded me-3"
-                                                 style="object-fit: cover;">
+                                            {% if linea.producto.imagenes is not empty %}
+                                                <img src="{{ linea.producto.imagenes[0] }}" 
+                                                     alt="{{ linea.producto.nombre }}"
+                                                     width="50" height="50"
+                                                     class="rounded me-3"
+                                                     style="object-fit: cover; border: 2px solid #422A21;">
+                                            {% else %}
+                                                <img src="/images/placeholder.jpg" 
+                                                     alt="Sin imagen"
+                                                     width="50" height="50"
+                                                     class="rounded me-3"
+                                                     style="object-fit: cover; border: 2px solid #422A21;">
+                                            {% endif %}
                                             <div>
                                                 <strong>{{ linea.producto.nombre }}</strong>
                                                 <br>
-                                                <small class="text-muted">{{ linea.producto.categoria.nombre }}</small>
+                                                <small class="text-muted">{{ linea.producto.categoria.descripcion }}</small>
                                             </div>
                                         </div>
                                     </td>
@@ -171,8 +179,15 @@
             </div>
             {% endif %}
 
-            <!-- Botón Volver -->
+            <!-- Botón Descargar Factura -->
             <div class="d-grid gap-2 mt-4">
+                <a href="/app/pedidos/{{ pedido.id }}/factura" class="btn btn-success" style="border: 2px solid #422A21; border-radius: 12px;">
+                    <i class="bi bi-file-earmark-pdf-fill me-2"></i>Descargar Factura PDF
+                </a>
+            </div>
+
+            <!-- Botón Volver -->
+            <div class="d-grid gap-2 mt-3">
                 <a href="/app/perfil" class="btn btn-secondary" style="border: 2px solid #422A21; border-radius: 12px;">
                     <i class="bi bi-arrow-left me-2"></i>Volver al Perfil
                 </a>

@@ -1,0 +1,261 @@
+{% include 'fragments/header' %}
+
+<style>
+    .admin-container {
+        background-color: #fffdf5;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+    
+    .admin-card {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 15px;
+        box-shadow: 6px 6px 0px #422A21;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 8px 8px 0px #422A21;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .stat-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-number {
+        font-family: 'Luckiest Guy', cursive;
+        font-size: 2.5rem;
+        margin: 0.5rem 0;
+    }
+    
+    .stat-label {
+        color: #666;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+    
+    .quick-action-btn {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        text-decoration: none;
+        color: #422A21;
+        display: block;
+        transition: all 0.3s ease;
+        box-shadow: 4px 4px 0px #422A21;
+    }
+    
+    .quick-action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 0px #422A21;
+        color: #16BABD;
+    }
+    
+    .quick-action-btn i {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .table-admin {
+        background: white;
+        border: 3px solid #422A21;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .table-admin thead {
+        background-color: #16BABD;
+        color: #422A21;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 700;
+    }
+    
+    .table-admin tbody tr:hover {
+        background-color: #F4E4BA;
+    }
+    
+    .badge-estado {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-2" style="font-family: 'Luckiest Guy', cursive; color: #16BABD;">
+                <i class="fas fa-tachometer-alt me-3"></i>Panel de Administración
+            </h1>
+            <p class="lead" style="color: #422A21;">Gestiona tu tienda Centro Cocotero</p>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="admin-card stat-card">
+                    <div class="stat-icon" style="color: #16BABD;">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-number" style="color: #16BABD;">{{ totalProductos }}</div>
+                    <div class="stat-label">Productos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card stat-card">
+                    <div class="stat-icon" style="color: #FF9F1C;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" style="color: #FF9F1C;">{{ totalUsuarios }}</div>
+                    <div class="stat-label">Usuarios</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card stat-card">
+                    <div class="stat-icon" style="color: #488B49;">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="stat-number" style="color: #488B49;">{{ totalPedidos }}</div>
+                    <div class="stat-label">Pedidos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card stat-card">
+                    <div class="stat-icon" style="color: #422A21;">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="stat-number" style="color: #422A21;">{{ totalPagos }}</div>
+                    <div class="stat-label">Pagos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <h3 style="font-family: 'Luckiest Guy', cursive; color: #422A21; margin-bottom: 1.5rem;">
+                    <i class="fas fa-bolt me-2" style="color: #FF9F1C;"></i>Acciones Rápidas
+                </h3>
+            </div>
+            <div class="col-md-3">
+                <a href="/admin/productos" class="quick-action-btn">
+                    <i class="fas fa-box" style="color: #16BABD;"></i>
+                    <div style="font-weight: 700;">Gestionar Productos</div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="/admin/productos/nuevo" class="quick-action-btn">
+                    <i class="fas fa-plus-circle" style="color: #488B49;"></i>
+                    <div style="font-weight: 700;">Nuevo Producto</div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="/admin/usuarios" class="quick-action-btn">
+                    <i class="fas fa-users-cog" style="color: #FF9F1C;"></i>
+                    <div style="font-weight: 700;">Gestionar Usuarios</div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="/admin/pedidos" class="quick-action-btn">
+                    <i class="fas fa-clipboard-list" style="color: #422A21;"></i>
+                    <div style="font-weight: 700;">Ver Pedidos</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Últimos Pedidos -->
+        <div class="row">
+            <div class="col-12">
+                <h3 style="font-family: 'Luckiest Guy', cursive; color: #422A21; margin-bottom: 1.5rem;">
+                    <i class="fas fa-clock me-2" style="color: #16BABD;"></i>Últimos Pedidos
+                </h3>
+                <div class="table-admin">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID Pedido</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if ultimosPedidos is not empty %}
+                                {% for pedido in ultimosPedidos %}
+                                <tr>
+                                    <td><strong>#{{ pedido.id }}</strong></td>
+                                    <td>{{ pedido.usuario.nombre }} {{ pedido.usuario.apellidos }}</td>
+                                    <td>{{ pedido.createdAt | formatDateTime }}</td>
+                                    <td><strong>{{ pedido.total | formatPrice }}</strong></td>
+                                    <td>
+                                        {% if pedido.estado.name() == "PENDIENTE" %}
+                                            <span class="badge" style="background-color: #FF9F1C; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                PENDIENTE
+                                            </span>
+                                        {% elseif pedido.estado.name() == "PAGADO" %}
+                                            <span class="badge" style="background-color: #16BABD; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                PAGADO
+                                            </span>
+                                        {% elseif pedido.estado.name() == "CONFIRMADO" %}
+                                            <span class="badge" style="background-color: #16BABD; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                CONFIRMADO
+                                            </span>
+                                        {% elseif pedido.estado.name() == "ENVIADO" %}
+                                            <span class="badge" style="background-color: #488B49; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                ENVIADO
+                                            </span>
+                                        {% elseif pedido.estado.name() == "ENTREGADO" %}
+                                            <span class="badge" style="background-color: #28a745; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                ENTREGADO
+                                            </span>
+                                        {% elseif pedido.estado.name() == "CANCELADO" %}
+                                            <span class="badge" style="background-color: #dc3545; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                CANCELADO
+                                            </span>
+                                        {% else %}
+                                            <span class="badge" style="background-color: #6c757d; color: white; padding: 0.4rem 0.8rem; border-radius: 15px;">
+                                                {{ pedido.estado.name() }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/admin/pedidos/{{ pedido.id }}" class="btn btn-sm" style="background-color: #16BABD; color: white;">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <i class="fas fa-inbox fa-3x mb-3" style="color: #ccc;"></i>
+                                        <p class="text-muted mb-0">No hay pedidos todavía</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'fragments/footer' %}

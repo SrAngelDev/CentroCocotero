@@ -17,4 +17,8 @@ public enum TipoCategoria {
     TipoCategoria(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
 }

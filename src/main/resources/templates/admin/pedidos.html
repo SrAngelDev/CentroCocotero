@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos - Panel de Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #F4E4BA 0%, #fff 100%);
+            min-height: 100vh;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #16BABD 0%, #488B49 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .admin-header h1 {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .btn-tropical {
+            background: linear-gradient(135deg, #FF9F1C 0%, #F4A732 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        .btn-tropical:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 159, 28, 0.4);
+            color: white;
+        }
+        .badge-pendiente {
+            background-color: #FF9F1C;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .badge-confirmado {
+            background-color: #16BABD;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .badge-enviado {
+            background-color: #488B49;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .badge-entregado {
+            background-color: #28a745;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .badge-cancelado {
+            background-color: #dc3545;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .table thead {
+            background: linear-gradient(135deg, #422A21 0%, #5a3d32 100%);
+            color: white;
+        }
+        .table thead th {
+            border: none;
+            padding: 1rem;
+            font-weight: 700;
+        }
+        .table tbody tr {
+            transition: all 0.3s;
+        }
+        .table tbody tr:hover {
+            background-color: #F4E4BA;
+            transform: scale(1.01);
+        }
+        .btn-sm-action {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            margin: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    {% include "fragments/header" %}
+
+    <div class="admin-header">
+        <div class="container">
+            <h1>📦 Gestión de Pedidos</h1>
+            <p class="mb-0">Administra y supervisa todos los pedidos del sistema</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="mb-0">
+                    <i class="bi bi-box-seam text-primary"></i> Lista de Pedidos
+                </h3>
+                <a href="/admin/dashboard" class="btn btn-tropical">
+                    <i class="bi bi-arrow-left"></i> Volver al Dashboard
+                </a>
+            </div>
+
+            {% if mensajeExito %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> {{ mensajeExito }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+
+            {% if mensajeAdvertencia %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ mensajeAdvertencia }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+
+            {% if mensajeError %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-x-circle-fill"></i> {{ mensajeError }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+
+            {% if pedidos is empty %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No hay pedidos registrados en el sistema
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Nº Pedido</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pedido in pedidos %}
+                            <tr>
+                                <td><strong>#{{ pedido.numeroPedido }}</strong></td>
+                                <td>
+                                    {{ pedido.usuario.nombre }}<br>
+                                    <small class="text-muted">{{ pedido.usuario.email }}</small>
+                                </td>
+                                <td>{{ pedido.createdAt.format('dd/MM/yyyy HH:mm') }}</td>
+                                <td><strong>{{ pedido.total }}€</strong></td>
+                                <td>
+                                    {% if pedido.estado.name() == "PENDIENTE" %}
+                                        <span class="badge badge-pendiente">
+                                            <i class="bi bi-clock-fill"></i> PENDIENTE
+                                        </span>
+                                    {% elseif pedido.estado.name() == "PAGADO" %}
+                                        <span class="badge badge-confirmado">
+                                            <i class="bi bi-credit-card-fill"></i> PAGADO
+                                        </span>
+                                    {% elseif pedido.estado.name() == "CONFIRMADO" %}
+                                        <span class="badge badge-confirmado">
+                                            <i class="bi bi-check-circle-fill"></i> CONFIRMADO
+                                        </span>
+                                    {% elseif pedido.estado.name() == "ENVIADO" %}
+                                        <span class="badge badge-enviado">
+                                            <i class="bi bi-truck"></i> ENVIADO
+                                        </span>
+                                    {% elseif pedido.estado.name() == "ENTREGADO" %}
+                                        <span class="badge badge-entregado">
+                                            <i class="bi bi-check-all"></i> ENTREGADO
+                                        </span>
+                                    {% elseif pedido.estado.name() == "CANCELADO" %}
+                                        <span class="badge badge-cancelado">
+                                            <i class="bi bi-x-circle-fill"></i> CANCELADO
+                                        </span>
+                                    {% else %}
+                                        <span class="badge" style="background-color: #6c757d;">
+                                            <i class="bi bi-question-circle"></i> {{ pedido.estado.name() }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="post" action="/admin/pedidos/cambiar-estado/{{ pedido.id }}" style="display: inline;">
+                                        <input type="hidden" name="_csrf" value="{{ _csrf.token }}">
+                                        <select name="nuevoEstado" class="form-select form-select-sm d-inline-block w-auto me-2" onchange="this.form.submit()">
+                                            {% for estado in estados %}
+                                                <option value="{{ estado }}" {% if estado == pedido.estado %}selected{% endif %}>
+                                                    {{ estado.name() }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                    
+                                    <a href="/admin/pedidos/{{ pedido.id }}" class="btn btn-info btn-sm-action">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include "fragments/footer" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
