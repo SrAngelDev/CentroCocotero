@@ -9,6 +9,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import srangeldev.centrococotero.models.Favorito;
+import srangeldev.centrococotero.models.TipoRol;
 import srangeldev.centrococotero.models.Usuario;
 import srangeldev.centrococotero.services.CarritoService;
 import srangeldev.centrococotero.services.FavoritoService;
@@ -74,7 +75,7 @@ public class GlobalDataController {
     public boolean isAdmin() {
         Usuario usuario = getUsuarioLogueado();
         if (usuario != null) {
-            return "ADMIN".equals(usuario.getRol());
+            return TipoRol.ADMIN.equals(usuario.getRol());
         }
         return false;
     }
@@ -92,7 +93,7 @@ public class GlobalDataController {
     public String getUserRole() {
         Usuario usuario = getUsuarioLogueado();
         if (usuario != null) {
-            return usuario.getRol();
+            return usuario.getRol().name();
         }
         return null;
     }

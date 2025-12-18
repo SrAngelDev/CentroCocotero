@@ -6,11 +6,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import srangeldev.centrococotero.models.Producto;
 import srangeldev.centrococotero.models.TipoCategoria;
+import srangeldev.centrococotero.models.TipoRol;
 import srangeldev.centrococotero.models.Usuario;
-import srangeldev.centrococotero.repositories.FavoritoRepository;
-import srangeldev.centrococotero.repositories.ItemCarritoRepository;
-import srangeldev.centrococotero.repositories.ProductoRepository;
-import srangeldev.centrococotero.repositories.UserRepository;
+import srangeldev.centrococotero.repositories.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,6 +29,12 @@ public class DatabaseInitializer implements CommandLineRunner {
     private ItemCarritoRepository itemCarritoRepository;
 
     @Autowired
+    private PagoRepository pagoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -46,6 +50,12 @@ public class DatabaseInitializer implements CommandLineRunner {
         System.out.println("   - Borrando favoritos...");
         favoritoRepository.deleteAll();
         
+        System.out.println("   - Borrando pagos...");
+        pagoRepository.deleteAll();
+        
+        System.out.println("   - Borrando pedidos (incluye líneas)...");
+        pedidoRepository.deleteAll();
+        
         System.out.println("   - Borrando usuarios...");
         userRepository.deleteAll();
 
@@ -57,18 +67,18 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .apellidos("Sistema")
                 .email("admin@centrococotero.com")
                 .password(passwordEncoder.encode("admin123"))
-                .rol("ADMIN")
+                .rol(TipoRol.ADMIN)
                 .avatar("/images/logo.png")
                 .deleted(false)
                 .build();
 
-        // Usuario MODERADOR
+        // Usuario normal
         Usuario moderador = Usuario.builder()
                 .nombre("María")
-                .apellidos("Moderadora")
-                .email("moderador@centrococotero.com")
-                .password(passwordEncoder.encode("mod123"))
-                .rol("MODERATOR")
+                .apellidos("López")
+                .email("maria@centrococotero.com")
+                .password(passwordEncoder.encode("user123"))
+                .rol(TipoRol.USER)
                 .avatar("/images/logo.png")
                 .deleted(false)
                 .build();
@@ -79,7 +89,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .apellidos("Pérez")
                 .email("juan@email.com")
                 .password(passwordEncoder.encode("user123"))
-                .rol("USER")
+                .rol(TipoRol.USER)
                 .avatar("/images/logo.png")
                 .deleted(false)
                 .build();
@@ -90,7 +100,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .apellidos("García")
                 .email("ana@email.com")
                 .password(passwordEncoder.encode("user123"))
-                .rol("USER")
+                .rol(TipoRol.USER)
                 .avatar("/images/logo.png")
                 .deleted(false)
                 .build();
@@ -101,7 +111,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .apellidos("López")
                 .email("carlos@email.com")
                 .password(passwordEncoder.encode("user123"))
-                .rol("USER")
+                .rol(TipoRol.USER)
                 .avatar("/images/logo.png")
                 .deleted(false)
                 .build();

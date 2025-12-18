@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import srangeldev.centrococotero.models.TipoRol;
 import srangeldev.centrococotero.models.Usuario;
 import srangeldev.centrococotero.repositories.UserRepository;
 
@@ -27,8 +28,8 @@ public class UserService {
     // @CacheEvict(value = "usuarios", allEntries = true)
     public Usuario registrar(Usuario u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
-        if (u.getRol() == null || u.getRol().isEmpty()) {
-            u.setRol("USER");
+        if (u.getRol() == null) {
+            u.setRol(TipoRol.USER);
         }
         return userRepository.save(u);
     }

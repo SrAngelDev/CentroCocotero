@@ -45,8 +45,9 @@ public class Usuario implements UserDetails {
 
     private String password;
 
-    @NotEmpty
-    private String rol = "USER";
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false)
+    private TipoRol rol = TipoRol.USER;
 
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
@@ -65,7 +66,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.rol));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.rol.getAuthority()));
     }
 
     @Override

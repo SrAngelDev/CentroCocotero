@@ -2,81 +2,105 @@
 
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-9">
             <!-- Card de éxito -->
-            <div class="card shadow-lg border-0">
-                <div class="card-body text-center p-5">
-                    <!-- Icono de éxito -->
-                    <div class="mb-4">
-                        <div class="rounded-circle bg-success d-inline-flex align-items-center justify-content-center" 
-                             style="width: 100px; height: 100px;">
-                            <i class="bi bi-check-circle-fill text-white" style="font-size: 4rem;"></i>
+            <div class="card shadow-lg border-0" style="border: 3px solid #16BABD !important; border-radius: 15px; overflow: hidden;">
+                <!-- Header con colores de la marca -->
+                <div class="text-center p-4" style="background: linear-gradient(135deg, #16BABD 0%, #488B49 100%);">
+                    <div class="mb-3">
+                        <div style="font-size: 4rem;">🥥</div>
+                    </div>
+                    <h1 class="display-4 fw-bold text-white mb-2" style="font-family: 'Luckiest Guy', cursive; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                        ¡PEDIDO CONFIRMADO!
+                    </h1>
+                    <p class="lead text-white mb-0" style="font-size: 1.1rem;">
+                        Tu pedido ha sido procesado exitosamente 🎉
+                    </p>
+                </div>
+
+                <div class="card-body p-4 p-md-5" style="background-color: #FFFDF5;">
+
+                    <!-- Información del pedido -->
+                    {% if pedido is not null %}
+                    <!-- Número de pedido destacado -->
+                    <div class="text-center mb-4">
+                        <div class="d-inline-block py-3 px-5 rounded-3" 
+                             style="background: linear-gradient(135deg, #FF9F1C 0%, #FF7F1C 100%); 
+                                    border: 3px dashed #422A21;">
+                            <div style="color: white; font-size: 0.9rem; margin-bottom: 5px;">
+                                <strong>📦 Número de Pedido</strong>
+                            </div>
+                            <div style="color: white; font-family: 'Luckiest Guy', cursive; font-size: 2rem; letter-spacing: 1px;">
+                                #{{ pedido.id }}
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Título -->
-                    <h1 class="display-5 fw-bold text-success mb-3">
-                        ¡Pedido Confirmado!
-                    </h1>
-
-                    <p class="lead text-muted mb-4">
-                        Tu pedido ha sido procesado exitosamente
-                    </p>
-
-                    <!-- Información del pedido -->
-                    {% if pedido %}
-                    <div class="alert alert-info d-inline-block py-3 px-4 mb-4">
-                        <h5 class="mb-2">Número de Pedido</h5>
-                        <h3 class="mb-0 fw-bold text-primary">
-                            <i class="bi bi-receipt me-2"></i>#{{ pedido.id }}
-                        </h3>
-                    </div>
-
-                    <div class="row text-start mb-4">
-                        <div class="col-md-6 mb-3">
-                            <div class="card bg-light border-0">
-                                <div class="card-body">
-                                    <h6 class="text-muted mb-2">
-                                        <i class="bi bi-calendar-check me-2"></i>Fecha del Pedido
+                    <!-- Detalles en tarjetas -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm" style="background-color: #F4E4BA;">
+                                <div class="card-body text-center">
+                                    <div class="mb-2" style="font-size: 2rem;">📅</div>
+                                    <h6 class="mb-2" style="color: #16BABD; font-weight: 700;">
+                                        Fecha del Pedido
                                     </h6>
-                                    <p class="mb-0 fw-semibold">
+                                    <p class="mb-0 fw-semibold" style="color: #422A21;">
                                         {{ pedido.createdAt | formatDateTime }}
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="card bg-light border-0">
-                                <div class="card-body">
-                                    <h6 class="text-muted mb-2">
-                                        <i class="bi bi-cash-coin me-2"></i>Total Pagado
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm" style="background-color: #F4E4BA;">
+                                <div class="card-body text-center">
+                                    <div class="mb-2" style="font-size: 2rem;">💰</div>
+                                    <h6 class="mb-2" style="color: #16BABD; font-weight: 700;">
+                                        Total Pagado
                                     </h6>
-                                    <p class="mb-0 fw-semibold fs-5 text-success">
+                                    <p class="mb-0 fw-bold fs-4" style="color: #488B49;">
                                         {{ pedido.total | formatPrice }}
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="card bg-light border-0">
-                                <div class="card-body">
-                                    <h6 class="text-muted mb-2">
-                                        <i class="bi bi-truck me-2"></i>Dirección de Envío
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm" style="background-color: #F4E4BA;">
+                                <div class="card-body text-center">
+                                    <div class="mb-2" style="font-size: 2rem;">🚀</div>
+                                    <h6 class="mb-2" style="color: #16BABD; font-weight: 700;">
+                                        Estado
                                     </h6>
-                                    <p class="mb-0">{{ pedido.direccionEnvio }}</p>
+                                    <p class="mb-0 fw-semibold" style="color: #422A21;">
+                                        {{ pedido.estado }}
+                                    </p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Dirección de envío -->
+                    <div class="card border-0 shadow-sm mb-4" style="border: 2px solid #16BABD !important; background-color: white;">
+                        <div class="card-body">
+                            <h6 class="mb-2" style="color: #16BABD; font-weight: 700;">
+                                <i class="bi bi-truck me-2"></i>Dirección de Envío
+                            </h6>
+                            <p class="mb-0" style="color: #422A21; font-weight: 500;">
+                                {{ pedido.direccionEnvio }}
+                            </p>
                         </div>
                     </div>
                     {% endif %}
 
                     <!-- Mensaje informativo -->
-                    <div class="alert alert-light border text-start mb-4">
+                    <div class="alert mb-4" style="background-color: #FFF9E6; border-left: 4px solid #FF9F1C; border-radius: 8px;">
                         <div class="d-flex align-items-start">
-                            <i class="bi bi-envelope-check-fill text-primary me-3 fs-3"></i>
+                            <div class="me-3" style="font-size: 2rem;">📧</div>
                             <div>
-                                <h6 class="mb-2">Confirmación Enviada</h6>
-                                <p class="mb-0 small">
+                                <h6 class="mb-2" style="color: #422A21; font-weight: 700;">
+                                    Confirmación Enviada
+                                </h6>
+                                <p class="mb-0" style="color: #666;">
                                     Hemos enviado un email de confirmación con tu factura en PDF a tu correo electrónico.
                                     Revisa tu bandeja de entrada o spam.
                                 </p>
@@ -85,61 +109,68 @@
                     </div>
 
                     <!-- Información adicional -->
-                    <div class="bg-light rounded p-4 mb-4">
-                        <h5 class="mb-3">
-                            <i class="bi bi-question-circle me-2 text-info"></i>¿Qué sigue?
+                    <div class="rounded-3 p-4 mb-4" style="background-color: #F4E4BA;">
+                        <h5 class="mb-3 text-center" style="font-family: 'Luckiest Guy', cursive; color: #16BABD; font-size: 1.5rem;">
+                            ¿Qué sigue ahora?
                         </h5>
-                        <ul class="list-unstyled text-start mb-0">
-                            <li class="mb-2">
-                                <i class="bi bi-check2 text-success me-2"></i>
-                                Recibirás un email de confirmación con los detalles
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-check2 text-success me-2"></i>
-                                Prepararemos tu pedido en las próximas 24-48 horas
-                            </li>
-                            <li class="mb-2">
-                                <i class="bi bi-check2 text-success me-2"></i>
-                                Te notificaremos cuando tu pedido sea enviado
-                            </li>
-                            <li class="mb-0">
-                                <i class="bi bi-check2 text-success me-2"></i>
-                                Puedes seguir el estado desde tu perfil
-                            </li>
-                        </ul>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <div class="d-flex align-items-start">
+                                    <span class="me-2" style="color: #488B49; font-size: 1.3rem; font-weight: bold;">✓</span>
+                                    <span style="color: #422A21;">Recibirás actualizaciones sobre el estado de tu pedido</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-start">
+                                    <span class="me-2" style="color: #488B49; font-size: 1.3rem; font-weight: bold;">✓</span>
+                                    <span style="color: #422A21;">Prepararemos tu pedido en las próximas 24-48 horas</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-start">
+                                    <span class="me-2" style="color: #488B49; font-size: 1.3rem; font-weight: bold;">✓</span>
+                                    <span style="color: #422A21;">Te notificaremos cuando tu pedido sea enviado</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-start">
+                                    <span class="me-2" style="color: #488B49; font-size: 1.3rem; font-weight: bold;">✓</span>
+                                    <span style="color: #422A21;">Puedes seguir el estado desde tu perfil</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Botones de acción -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                        {% if pedido %}
-                        <a href="/app/pedidos/{{ pedido.id }}" class="btn btn-primary btn-lg px-4">
-                            <i class="bi bi-receipt-cutoff me-2"></i>Ver Detalles del Pedido
+                    <div class="d-grid gap-3 d-md-flex justify-content-md-center mt-4">
+                        <a href="/app/perfil" class="btn btn-lg px-4 py-3 shadow" 
+                           style="background-color: #488B49; color: white; border: none; border-radius: 12px; font-weight: 700;">
+                            <i class="bi bi-person-circle me-2"></i>Ver Mis Pedidos
+                        </a>
+                        {% if pedido is not null %}
+                        <a href="/app/pedidos/{{ pedido.id }}" class="btn btn-lg px-4 py-3 shadow" 
+                           style="background-color: #FF9F1C; color: white; border: none; border-radius: 12px; font-weight: 700;">
+                            <i class="bi bi-receipt-cutoff me-2"></i>Ver Detalles
                         </a>
                         {% endif %}
-                        <a href="/" class="btn btn-outline-secondary btn-lg px-4">
+                        <a href="/" class="btn btn-lg px-4 py-3 shadow" 
+                           style="background-color: white; color: #422A21; border: 2px solid #16BABD; border-radius: 12px; font-weight: 700;">
                             <i class="bi bi-house-door me-2"></i>Volver al Inicio
                         </a>
-                    </div>
-
-                    <!-- Link al perfil -->
-                    <div class="mt-4">
-                        <p class="text-muted small mb-0">
-                            También puedes ver todos tus pedidos desde 
-                            <a href="/app/perfil" class="text-decoration-none">
-                                tu perfil <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- Testimonio o mensaje adicional -->
             <div class="text-center mt-4">
-                <div class="card border-0 bg-transparent">
-                    <div class="card-body">
-                        <i class="bi bi-chat-heart-fill text-primary mb-3" style="font-size: 2.5rem;"></i>
-                        <p class="lead text-muted mb-0">
-                            "Gracias por confiar en Centro Cocotero.<br>
+                <div class="card border-0" style="background-color: transparent;">
+                    <div class="card-body py-4">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🥥🌴</div>
+                        <p class="mb-2" style="font-family: 'Luckiest Guy', cursive; color: #16BABD; font-size: 1.5rem;">
+                            CENTRO COCOTERO
+                        </p>
+                        <p class="lead mb-0" style="color: #666;">
+                            "Gracias por confiar en nosotros.<br>
                             Trabajamos para ofrecerte los mejores productos naturales."
                         </p>
                     </div>
@@ -148,14 +179,5 @@
         </div>
     </div>
 </div>
-
-<!-- Confetti animation (opcional) -->
-<script>
-    // Animación de confeti cuando se carga la página
-    window.addEventListener('load', () => {
-        // Puedes agregar una librería de confeti como canvas-confetti
-        console.log('¡Pedido confirmado! 🎉');
-    });
-</script>
 
 {% include 'fragments/footer' %}

@@ -256,7 +256,7 @@
                         </h3>
 
                         <form id="payment-form" method="post" action="/app/checkout/procesar">
-                            <input type="hidden" name="${csrfParamName}" value="${csrfToken}">
+                            <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
                             <input type="hidden" name="paymentMethodId" id="paymentMethodId">
 
                             <!-- Dirección de envío -->
@@ -347,7 +347,7 @@
                                     class="btn btn-pagar">
                                     <i class="fas fa-lock me-2"></i>Pagar {{ total | formatPrice }}
                                 </button>
-                                <a href="/app/productos/carrito" class="btn" style="background-color: white; color: #422A21; border: 2px solid #422A21; border-radius: 12px; font-weight: 600; font-family: 'Fredoka', sans-serif;">
+                                <a href="/carrito" class="btn" style="background-color: white; color: #422A21; border: 2px solid #422A21; border-radius: 12px; font-weight: 600; font-family: 'Fredoka', sans-serif;">
                                     <i class="fas fa-arrow-left me-2"></i>Volver al Carrito
                                 </a>
                             </div>
@@ -371,7 +371,7 @@
                             {% for item in itemsCarrito %}
                             <div class="producto-item d-flex align-items-center mb-3">
                                 <img 
-                                    src="{{ item.producto.imagen }}" 
+                                    src="{{ item.producto.imagenes[0] }}" 
                                     alt="{{ item.producto.nombre }}"
                                     class="producto-img me-3">
                                 <div class="flex-grow-1">

@@ -70,86 +70,129 @@ public class EmailService {
      * @return HTML del email
      */
     private String construirEmailHtml(Pedido pedido) {
-        return """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-                    .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-                    .pedido-info { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
-                    .pedido-info h3 { color: #667eea; margin-top: 0; }
-                    .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-                    .total { font-size: 1.5em; font-weight: bold; color: #667eea; text-align: right; margin-top: 20px; }
-                    .footer { text-align: center; color: #888; margin-top: 30px; font-size: 0.9em; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1>¡Pedido Confirmado!</h1>
-                        <p>Gracias por tu compra en Centro Cocotero</p>
-                    </div>
-                    
-                    <div class="content">
-                        <p>Hola <strong>%s</strong>,</p>
-                        
-                        <p>Tu pedido ha sido confirmado y está siendo procesado. A continuación encontrarás los detalles:</p>
-                        
-                        <div class="pedido-info">
-                            <h3>Detalles del Pedido</h3>
-                            
-                            <div class="info-row">
-                                <span><strong>Número de Pedido:</strong></span>
-                                <span>%s</span>
-                            </div>
-                            
-                            <div class="info-row">
-                                <span><strong>Estado:</strong></span>
-                                <span>%s</span>
-                            </div>
-                            
-                            <div class="info-row">
-                                <span><strong>Productos:</strong></span>
-                                <span>%d artículos</span>
-                            </div>
-                            
-                            %s
-                            
-                            <div class="total">
-                                Total: %.2f €
-                            </div>
-                        </div>
-                        
-                        <p>Adjunto encontrarás la factura en formato PDF.</p>
-                        
-                        <p>Puedes seguir el estado de tu pedido desde tu perfil en nuestra tienda.</p>
-                        
-                        <p>Si tienes alguna duda, no dudes en contactarnos.</p>
-                        
-                        <p>¡Gracias por confiar en nosotros!</p>
-                    </div>
-                    
-                    <div class="footer">
-                        <p>Centro Cocotero - Productos naturales de calidad</p>
-                        <p>Este es un email automático, por favor no respondas a este mensaje.</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """.formatted(
-                pedido.getUsuario().getNombre(),
-                pedido.getId(),
-                pedido.getEstado().toString(),
-                pedido.getLineas().size(),
-                pedido.getDireccionEnvio() != null && !pedido.getDireccionEnvio().isEmpty()
-                        ? "<div class=\"info-row\"><span><strong>Dirección de envío:</strong></span><span>" + pedido.getDireccionEnvio() + "</span></div>"
-                        : "",
-                pedido.getTotal()
-        );
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>");
+        html.append("<html>");
+        html.append("<head>");
+        html.append("<meta charset='UTF-8'>");
+        html.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
+        html.append("<link href='https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@400;600;700&display=swap' rel='stylesheet'>");
+        html.append("<style>");
+        html.append("* { box-sizing: border-box; margin: 0; padding: 0; }");
+        html.append("body { font-family: 'Nunito', sans-serif; line-height: 1.6; color: #422A21; background-color: #F4E4BA; padding: 20px; }");
+        html.append(".container { max-width: 650px; margin: 0 auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }");
+        html.append(".header { background: linear-gradient(135deg, #16BABD 0%, #488B49 100%); color: white; padding: 40px 30px; text-align: center; position: relative; }");
+        html.append(".header::before { content: '🥥'; font-size: 60px; display: block; margin-bottom: 15px; }");
+        html.append(".header h1 { font-family: 'Luckiest Guy', cursive; font-size: 2.5em; margin: 0 0 10px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); letter-spacing: 1px; }");
+        html.append(".header p { font-size: 1.1em; margin: 0; opacity: 0.95; }");
+        html.append(".content { padding: 40px 30px; background: #FFFDF5; }");
+        html.append(".greeting { font-size: 1.2em; margin-bottom: 20px; color: #422A21; }");
+        html.append(".greeting strong { color: #16BABD; font-weight: 700; }");
+        html.append(".intro { color: #666; margin-bottom: 25px; line-height: 1.8; }");
+        html.append(".pedido-box { background: white; border: 3px solid #16BABD; border-radius: 12px; padding: 25px; margin: 25px 0; box-shadow: 0 4px 15px rgba(22, 186, 189, 0.1); }");
+        html.append(".pedido-header { display: flex; align-items: center; justify-content: center; background: #16BABD; color: white; padding: 15px; border-radius: 8px; margin: -25px -25px 20px -25px; }");
+        html.append(".pedido-header h3 { font-family: 'Luckiest Guy', cursive; margin: 0; font-size: 1.5em; letter-spacing: 0.5px; }");
+        html.append(".pedido-numero { background: linear-gradient(135deg, #FF9F1C 0%, #FF7F1C 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; border: 3px dashed #422A21; }");
+        html.append(".pedido-numero strong { display: block; font-size: 0.9em; margin-bottom: 8px; opacity: 0.9; }");
+        html.append(".pedido-numero span { font-family: 'Luckiest Guy', cursive; font-size: 1.8em; display: block; letter-spacing: 1px; }");
+        html.append(".info-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 2px solid #F4E4BA; align-items: center; }");
+        html.append(".info-row:last-of-type { border-bottom: none; }");
+        html.append(".info-row strong { color: #16BABD; font-weight: 700; }");
+        html.append(".info-row .value { color: #422A21; font-weight: 600; text-align: right; }");
+        html.append(".total-box { background: linear-gradient(135deg, #488B49 0%, #16BABD 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-top: 25px; }");
+        html.append(".total-box .label { font-size: 0.9em; opacity: 0.9; margin-bottom: 5px; }");
+        html.append(".total-box .amount { font-family: 'Luckiest Guy', cursive; font-size: 2.5em; letter-spacing: 1px; }");
+        html.append(".steps-section { background: #F4E4BA; padding: 25px; border-radius: 10px; margin: 25px 0; }");
+        html.append(".steps-section h4 { font-family: 'Luckiest Guy', cursive; color: #16BABD; font-size: 1.3em; margin-bottom: 15px; text-align: center; }");
+        html.append(".step { display: flex; align-items: flex-start; margin: 12px 0; padding-left: 10px; }");
+        html.append(".step::before { content: '✓'; color: #488B49; font-weight: bold; font-size: 1.3em; margin-right: 12px; }");
+        html.append(".step span { color: #422A21; line-height: 1.6; }");
+        html.append(".cta-box { text-align: center; margin: 25px 0; }");
+        html.append(".cta-button { display: inline-block; background: #FF9F1C; color: white; padding: 15px 35px; border-radius: 25px; text-decoration: none; font-weight: 700; font-size: 1.1em; box-shadow: 0 4px 15px rgba(255, 159, 28, 0.3); transition: all 0.3s; }");
+        html.append(".note { background: #FFF9E6; border-left: 4px solid #FF9F1C; padding: 15px 20px; margin: 20px 0; border-radius: 5px; color: #666; }");
+        html.append(".footer { background: #422A21; color: white; padding: 30px; text-align: center; }");
+        html.append(".footer-emoji { font-size: 40px; margin-bottom: 15px; }");
+        html.append(".footer p { margin: 8px 0; opacity: 0.9; }");
+        html.append(".footer .brand { font-family: 'Luckiest Guy', cursive; color: #16BABD; font-size: 1.3em; margin-bottom: 5px; }");
+        html.append("</style>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("<div class='container'>");
+        
+        html.append("<div class='header'>");
+        html.append("<h1>¡PEDIDO CONFIRMADO!</h1>");
+        html.append("<p>Gracias por confiar en Centro Cocotero</p>");
+        html.append("</div>");
+        
+        html.append("<div class='content'>");
+        html.append("<p class='greeting'>¡Hola <strong>").append(pedido.getUsuario().getNombre()).append("</strong>! 🎉</p>");
+        html.append("<p class='intro'>Tu pedido ha sido confirmado y procesado exitosamente. Estamos preparando tus productos naturales con mucho cariño.</p>");
+        
+        html.append("<div class='pedido-numero'>");
+        html.append("<strong>Número de Pedido</strong>");
+        html.append("<span>#").append(pedido.getId()).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='pedido-box'>");
+        html.append("<div class='pedido-header'>");
+        html.append("<h3>📦 Detalles del Pedido</h3>");
+        html.append("</div>");
+        
+        html.append("<div class='info-row'>");
+        html.append("<strong>📅 Fecha del Pedido:</strong>");
+        html.append("<span class='value'>").append(pedido.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='info-row'>");
+        html.append("<strong>📦 Productos:</strong>");
+        html.append("<span class='value'>").append(pedido.getLineas().size()).append(" artículos</span>");
+        html.append("</div>");
+        
+        html.append("<div class='info-row'>");
+        html.append("<strong>🚀 Estado:</strong>");
+        html.append("<span class='value'>").append(pedido.getEstado().toString()).append("</span>");
+        html.append("</div>");
+        
+        if (pedido.getDireccionEnvio() != null && !pedido.getDireccionEnvio().isEmpty()) {
+            html.append("<div class='info-row'>");
+            html.append("<strong>🏠 Dirección de Envío:</strong>");
+            html.append("<span class='value'>").append(pedido.getDireccionEnvio()).append("</span>");
+            html.append("</div>");
+        }
+        
+        html.append("<div class='total-box'>");
+        html.append("<div class='label'>TOTAL PAGADO</div>");
+        html.append("<div class='amount'>").append(String.format("%.2f", pedido.getTotal())).append(" €</div>");
+        html.append("</div>");
+        html.append("</div>");
+        
+        html.append("<div class='note'>");
+        html.append("<strong>📧 Factura Adjunta:</strong> Encontrarás tu factura en PDF adjunta a este correo.");
+        html.append("</div>");
+        
+        html.append("<div class='steps-section'>");
+        html.append("<h4>¿Qué sigue ahora?</h4>");
+        html.append("<div class='step'><span>Recibirás actualizaciones sobre el estado de tu pedido</span></div>");
+        html.append("<div class='step'><span>Prepararemos tu pedido en las próximas 24-48 horas</span></div>");
+        html.append("<div class='step'><span>Te notificaremos cuando tu pedido sea enviado</span></div>");
+        html.append("<div class='step'><span>Puedes seguir tu pedido desde tu perfil</span></div>");
+        html.append("</div>");
+        
+        html.append("<p style='text-align: center; color: #666; margin-top: 20px;'>Si tienes alguna duda, no dudes en contactarnos. 💬</p>");
+        html.append("</div>");
+        
+        html.append("<div class='footer'>");
+        html.append("<div class='footer-emoji'>🥥🌴</div>");
+        html.append("<p class='brand'>CENTRO COCOTERO</p>");
+        html.append("<p>Productos naturales de la mejor calidad</p>");
+        html.append("<p style='font-size: 0.85em; margin-top: 15px; opacity: 0.7;'>Este es un correo automático, por favor no respondas a este mensaje.</p>");
+        html.append("</div>");
+        
+        html.append("</div>");
+        html.append("</body>");
+        html.append("</html>");
+        
+        return html.toString();
     }
 
     /**

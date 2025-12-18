@@ -74,3 +74,7 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+// Spring Boot automáticamente carga application-local.properties si existe
+// No se necesita configuración adicional
+

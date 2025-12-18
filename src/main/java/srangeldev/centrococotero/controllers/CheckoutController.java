@@ -39,7 +39,7 @@ public class CheckoutController {
         List<ItemCarrito> itemsCarrito = carritoService.listarPorUsuario(usuario.getId());
 
         if (itemsCarrito.isEmpty()) {
-            return "redirect:/app/productos/carrito?error=carrito-vacio";
+            return "redirect:/carrito?error=carrito-vacio";
         }
 
         // Calcular total
@@ -86,7 +86,7 @@ public class CheckoutController {
             String errorMsg = e.getMessage();
             if (errorMsg.contains("carrito")) {
                 redirectAttributes.addFlashAttribute("error", errorMsg);
-                return "redirect:/app/productos/carrito";
+                return "redirect:/carrito";
             }
             
             redirectAttributes.addFlashAttribute("error", "Error al procesar el pedido: " + errorMsg);
@@ -99,17 +99,25 @@ public class CheckoutController {
      */
     @GetMapping("/confirmacion")
     public String mostrarConfirmacion(
-            @ModelAttribute("pedidoId") String pedidoId,
             @AuthenticationPrincipal Usuario usuario,
             Model model
     ) {
+        // Obtener el pedidoId del flash attribute (si existe)
+        String pedidoId = (String) model.asMap().get("pedidoId");
+        
         if (pedidoId == null || pedidoId.isEmpty()) {
+            log.warn("Acceso a confirmación sin pedidoId - Usuario: {}", usuario.getEmail());
             return "redirect:/";
         }
 
         // Buscar el pedido
         Pedido pedido = pedidoService.buscarPorIdYUsuario(pedidoId, usuario.getId())
                 .orElse(null);
+
+        if (pedido == null) {
+            log.error("Pedido no encontrado: {} - Usuario: {}", pedidoId, usuario.getEmail());
+            return "redirect:/";
+        }
 
         model.addAttribute("pedido", pedido);
         return "app/checkout/confirmacion";
